@@ -62,34 +62,34 @@ export const Modal: React.FC<ModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity"
           />
 
           {/* Modal Card */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 12 }}
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 12 }}
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className={`relative w-full ${sizeClasses} bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-10 my-8`}
+            className={`relative w-full ${sizeClasses} bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-800 shadow-glow overflow-hidden z-10 my-8 text-slate-100`}
           >
             {/* Header */}
             {(title || showCloseButton) && (
-              <div className="flex items-start justify-between p-5 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+              <div className="flex items-start justify-between p-5 sm:p-6 border-b border-slate-800 bg-slate-950/60">
                 <div>
                   {title && (
-                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
                       {title}
                     </h3>
                   )}
                   {description && (
-                    <p className="mt-1 text-sm text-slate-500">{description}</p>
+                    <p className="mt-1 text-xs text-slate-400">{description}</p>
                   )}
                 </div>
                 {showCloseButton && (
                   <button
                     onClick={onClose}
-                    className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors -mr-2 -mt-2"
+                    className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors -mr-2 -mt-2"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -107,3 +107,4 @@ export const Modal: React.FC<ModalProps> = ({
     </AnimatePresence>
   );
 };
+

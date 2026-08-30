@@ -26,13 +26,13 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-white rounded-2xl border border-dashed border-slate-200 ${className}`}>
-      <div className="w-14 h-14 rounded-2xl bg-civic-50 flex items-center justify-center text-civic-600 mb-4 shadow-sm border border-civic-100/80">
-        <Icon className="w-7 h-7 stroke-[1.75]" />
+    <div className={`flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-slate-900/80 rounded-3xl border border-dashed border-slate-800 backdrop-blur-xl ${className}`}>
+      <div className="w-16 h-16 rounded-2xl bg-civic-950 flex items-center justify-center text-civic-400 mb-4 shadow-glow border border-civic-500/40">
+        <Icon className="w-8 h-8 stroke-[1.75]" />
       </div>
       
-      <h3 className="text-lg font-bold text-slate-800">{title}</h3>
-      <p className="text-sm text-slate-500 max-w-sm mt-1 mb-6 leading-relaxed">
+      <h3 className="text-lg font-bold text-white">{title}</h3>
+      <p className="text-sm text-slate-400 max-w-sm mt-1 mb-6 leading-relaxed">
         {description}
       </p>
 
@@ -41,7 +41,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           <Button
             onClick={onAction}
             leftIcon={actionIcon}
-            variant="primary"
+            variant="civic-glow"
           >
             {actionLabel}
           </Button>
@@ -51,6 +51,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           <Button
             onClick={onSecondaryAction}
             variant="outline"
+            className="border-slate-700 text-slate-300 hover:text-white"
           >
             {secondaryActionLabel}
           </Button>
@@ -59,3 +60,4 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     </div>
   );
 };
+

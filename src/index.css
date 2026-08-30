@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,13 +7,82 @@
 @layer base {
   html {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-slate-900 text-slate-100 antialiased selection:bg-civic-500 selection:text-white;
+  }
+}
+
+/* Glassmorphism and Modern Vibrant Utilities */
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .glass-card-dark {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-panel {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .gradient-border {
+    position: relative;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #2b85f6, #6366f1, #ec4899);
+    padding: 1px;
+  }
+
+  .gradient-border-inner {
+    border-radius: calc(1rem - 1px);
+    background: white;
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 25px -4px rgba(43, 133, 246, 0.4);
+  }
+
+  .glow-emerald {
+    box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.4);
+  }
+
+  .glow-amber {
+    box-shadow: 0 0 25px -4px rgba(245, 158, 11, 0.4);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 30px -4px rgba(168, 85, 247, 0.4);
+  }
+
+  .gradient-text-civic {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-civic-600 via-indigo-600 to-purple-600;
+  }
+
+  .gradient-text-emerald {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600;
+  }
+
+  .gradient-text-sunset {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600;
   }
 }
 
 /* Custom smooth scroll and transitions */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -24,37 +95,63 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
+  background-color: rgba(148, 163, 184, 0.35);
   border-radius: 9999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8;
+  background-color: rgba(148, 163, 184, 0.6);
+}
+
+/* Animated Ambient Mesh Backgrounds */
+.mesh-gradient-bg {
+  background: 
+    radial-gradient(at 0% 0%, rgba(43, 133, 246, 0.18) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.22) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+    #080E1C;
+}
+
+.mesh-gradient-light {
+  background: 
+    radial-gradient(at 0% 0%, rgba(219, 234, 254, 0.7) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(224, 231, 255, 0.8) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(243, 232, 255, 0.6) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(209, 250, 229, 0.6) 0px, transparent 50%),
+    #F8FAFC;
 }
 
 /* Radar pulse animation glow */
 .radar-grid {
   background-image: 
-    radial-gradient(circle at center, rgba(12, 131, 254, 0.08) 0%, transparent 70%),
-    linear-gradient(to right, rgba(226, 232, 240, 0.6) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(226, 232, 240, 0.6) 1px, transparent 1px);
+    radial-gradient(circle at center, rgba(43, 133, 246, 0.15) 0%, transparent 70%),
+    linear-gradient(to right, rgba(99, 102, 241, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.15) 1px, transparent 1px);
   background-size: 100% 100%, 28px 28px, 28px 28px;
 }
 
 .radar-sweep-cone {
   background: conic-gradient(
     from 0deg,
-    rgba(12, 131, 254, 0) 0deg,
-    rgba(12, 131, 254, 0.04) 270deg,
-    rgba(12, 131, 254, 0.28) 360deg
+    rgba(43, 133, 246, 0) 0deg,
+    rgba(99, 102, 241, 0.08) 270deg,
+    rgba(43, 133, 246, 0.45) 360deg
   );
+}
+
+/* Shimmer animation utility */
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
 }
 
 /* Print specific styles for legal drafts */
 @media print {
   body {
-    background: white;
-    color: black;
+    background: white !important;
+    color: black !important;
   }
   .no-print {
     display: none !important;
@@ -63,3 +160,4 @@
     display: block !important;
   }
 }
+
