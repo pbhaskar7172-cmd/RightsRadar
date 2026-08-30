@@ -41,3 +41,83 @@ Citizens frequently struggle to understand and exercise their civic and legal ri
 ---
 
 ## 🔄 Core User Journey
+
+Understand ➔ Diagnose ➔ Collect ➔ Guide ➔ Draft ➔ File ➔ Track ➔ Act ➔ Escalate ➔ Resolve
+
+1. **Understand:** User inputs the problem in everyday language.
+2. **Diagnose:** AI classifies the issue into a domain and seeks user confirmation.
+3. **Collect:** Dynamic smart questionnaire gathers only missing, essential information.
+4. **Guide:** Grounded engine recommends the exact legal or civic step.
+5. **Draft:** Structured, reviewable document (complaint/notice/RTI) is generated.
+6. **File:** User manually marks the case as submitted.
+7. **Track:** Unified dashboard manages timeline, evidence, and deadlines.
+8. **Act:** ActionRadar alerts user when follow-up action is required.
+9. **Escalate:** Automated triggers draft the next-stage appeal/escalation if deadlines pass.
+10. **Resolve:** Case remains monitored until marked resolved by the citizen.
+
+---
+
+## 🏗️ System Architecture
+
+[Citizen Input (Text/Voice/Image)]
+│
+▼
+[AI Intake Engine]
+│
+▼
+[Domain Classifier] ───► [Domain Packs (Rules, Templates, Corpus)]
+│
+├──────► [RAG Retrieval Engine] ───► [Grounding Verification]
+│
+├──────► [Document Engine]     ───► [Reviewable Drafts]
+│
+└──────► [Deadline Engine]     ───► [Deterministic Rules]
+│
+▼
+[Case Management Hub]
+│
+┌───────────────┴───────────────┐
+▼                               ▼
+[ActionRadar Engine]           [User Dashboard & Timeline]
+
+---
+
+## 💻 Tech Stack
+
+* **Frontend:** Next.js / React, Tailwind CSS, Lucide Icons
+* **Backend:** Node.js / Next.js Serverless API routes
+* **Database & Auth:** PostgreSQL / Supabase
+* **AI & Retrieval:** LLM (NLU & Document Generation), Embeddings + Vector Store (RAG over legal/civic corpora), Deterministic Rules Engine
+
+---
+
+## 🗄️ Database Schema Overview
+
+* **`USERS`**: User profile, authentication, contact preferences.
+* **`CASES`**: `id`, `user_id`, `domain`, `problem_text`, `status`, `filed_date`, `deadline_date`, `authority`, `priority`.
+* **`DOCUMENTS`**: `id`, `case_id`, `type`, `content`, `version`, `source_references`.
+* **`TIMELINE_EVENTS`**: `id`, `case_id`, `event_type` (diagnosis, draft, filed, escalation, resolved), `timestamp`.
+* **`EVIDENCE`**: `id`, `case_id`, `file_url`, `description`, `uploaded_at`.
+* **`DOMAIN_RULES`**: Domain-specific statutory deadlines, escalation criteria, and question trees.
+* **`LEGAL_CORPUS`**: Grounded reference material, acts, guidelines, and authority directories.
+
+---
+
+## 🚦 Getting Started
+
+### Prerequisites
+* Node.js (v18+)
+* PostgreSQL / Supabase Account
+* LLM API Key (OpenAI / Gemini / Anthropic)
+
+### Installation
+```bash
+# 1. Clone repository
+git clone [https://github.com/your-repo/rightsradar.git](https://github.com/your-repo/rightsradar.git)
+cd rightsradar
+
+# 2. Install dependencies
+npm install
+
+# 3. Setup environment variables
+cp .env.example .env.local
