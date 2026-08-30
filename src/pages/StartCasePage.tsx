@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   ArrowRight, 
   UploadCloud, 
@@ -17,12 +17,12 @@ import {
   ShieldCheck,
   Clock,
   Scale,
-  Zap
+  Zap,
+  ArrowUpRight
 } from 'lucide-react';
 import { useCivicData } from '../context/CivicDataContext';
 import { ISSUE_TYPE_LIST, ISSUE_TYPES } from '../data/issueTypes';
 import { IssueTypeId } from '../types';
-import { Button } from '../components/common/Button';
 
 export const StartCasePage: React.FC = () => {
   const navigate = useNavigate();
@@ -74,34 +74,33 @@ export const StartCasePage: React.FC = () => {
       return;
     }
 
-    // Initialize the draft in context
     startNewDraft(selectedType, problemSummary.trim(), fileName);
     navigate(`/intake?type=${selectedType}`);
   };
 
   const getDomainIcon = (id: IssueTypeId) => {
     switch (id) {
-      case 'rti': return <FileSearch className="w-6 h-6 text-blue-400" />;
-      case 'consumer': return <ShoppingBag className="w-6 h-6 text-emerald-400" />;
-      case 'tenant': return <Home className="w-6 h-6 text-amber-400" />;
-      case 'workplace': return <Briefcase className="w-6 h-6 text-purple-400" />;
-      case 'govt_scheme': return <Landmark className="w-6 h-6 text-cyan-400" />;
-      case 'cyber': return <ShieldAlert className="w-6 h-6 text-rose-400" />;
+      case 'rti': return <FileSearch className="w-5 h-5 text-blue-700" />;
+      case 'consumer': return <ShoppingBag className="w-5 h-5 text-emerald-700" />;
+      case 'tenant': return <Home className="w-5 h-5 text-amber-700" />;
+      case 'workplace': return <Briefcase className="w-5 h-5 text-purple-700" />;
+      case 'govt_scheme': return <Landmark className="w-5 h-5 text-cyan-700" />;
+      case 'cyber': return <ShieldAlert className="w-5 h-5 text-rose-700" />;
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn text-slate-100">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn text-slate-900">
       {/* Page Heading */}
       <div className="text-center sm:text-left">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-civic-950 text-civic-300 border border-civic-500/40 text-xs font-semibold uppercase tracking-wider mb-3 shadow-glow">
-          <Sparkles className="w-3.5 h-3.5 text-civic-400 animate-pulse" />
+        <span className="editorial-pill mb-3">
+          <Sparkles className="w-3.5 h-3.5 text-slate-900" />
           <span>Step 1: Statutory Problem Intake</span>
-        </div>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+        </span>
+        <h1 className="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight leading-tight mt-1">
           Tell us what happened
         </h1>
-        <p className="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+        <p className="text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed font-medium">
           Select your grievance category and describe the situation. We'll run a diagnostic assessment to recommend the most effective statutory legal action.
         </p>
       </div>
@@ -109,7 +108,7 @@ export const StartCasePage: React.FC = () => {
       <form onSubmit={handleContinue} className="space-y-8">
         {/* Step 1: Issue Type Category Selector */}
         <div className="space-y-3.5">
-          <label className="block text-sm font-bold text-slate-200">
+          <label className="block text-sm font-extrabold text-slate-900">
             1. Select Grievance Category
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
@@ -124,14 +123,14 @@ export const StartCasePage: React.FC = () => {
                     setSelectedType(type.id);
                     setErrorMessage('');
                   }}
-                  className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3.5 relative backdrop-blur-xl ${
+                  className={`p-4 rounded-3xl border-2 transition-all cursor-pointer flex items-start gap-3.5 relative ${
                     isSelected
-                      ? 'bg-slate-900 border-civic-500 shadow-glow ring-2 ring-civic-500/20'
-                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 shadow-elevated'
+                      ? 'bg-white border-slate-900 shadow-elevated'
+                      : 'bg-white/80 border-slate-200 hover:border-slate-300 shadow-subtle'
                   }`}
                 >
                   <div 
-                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border"
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border"
                     style={{ backgroundColor: `${type.accentColor}18`, borderColor: `${type.accentColor}40` }}
                   >
                     {getDomainIcon(type.id)}
@@ -139,16 +138,16 @@ export const StartCasePage: React.FC = () => {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-bold text-white truncate">
+                      <h3 className="text-sm font-extrabold text-slate-900 truncate">
                         {type.shortName}
                       </h3>
                       {isSelected && (
-                        <span className="w-5 h-5 rounded-full bg-civic-500 text-white flex items-center justify-center shadow-glow">
-                          <Check className="w-3.5 h-3.5 stroke-[3]" />
+                        <span className="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center">
+                          <Check className="w-3 h-3 stroke-[3]" />
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-400 mt-0.5 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-slate-500 mt-0.5 line-clamp-2 leading-relaxed font-medium">
                       {type.tagline}
                     </p>
                   </div>
@@ -163,19 +162,19 @@ export const StartCasePage: React.FC = () => {
           key={selectedType}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs backdrop-blur-xl shadow-elevated"
+          className="p-5 rounded-3xl bg-pastel-blue-light border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs shadow-subtle"
         >
           <div className="space-y-1">
-            <span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Primary Governing Statute:</span>
-            <p className="text-slate-100 font-semibold flex items-center gap-1.5">
-              <Scale className="w-3.5 h-3.5 text-civic-400" />
+            <span className="font-extrabold text-slate-500 uppercase tracking-wider text-[10px]">Primary Governing Statute:</span>
+            <p className="text-slate-900 font-extrabold flex items-center gap-1.5 text-sm">
+              <Scale className="w-4 h-4 text-blue-700" />
               <span>{activeConfig.primaryStatute}</span>
             </p>
           </div>
           <div className="sm:text-right space-y-1 shrink-0">
-            <span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Statutory Timeframe:</span>
-            <p className="text-amber-300 font-bold flex sm:justify-end items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-amber-400" />
+            <span className="font-extrabold text-slate-500 uppercase tracking-wider text-[10px]">Statutory Timeframe:</span>
+            <p className="text-slate-900 font-extrabold flex sm:justify-end items-center gap-1.5 text-sm">
+              <Clock className="w-4 h-4 text-amber-600" />
               <span>{activeConfig.statutoryTimeframe}</span>
             </p>
           </div>
@@ -184,10 +183,10 @@ export const StartCasePage: React.FC = () => {
         {/* Step 2: Problem Description ("Tell us what happened") */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label htmlFor="problemDescription" className="block text-sm font-bold text-slate-200">
+            <label htmlFor="problemDescription" className="block text-sm font-extrabold text-slate-900">
               2. Describe your situation & grievance
             </label>
-            <span className="text-xs text-slate-500">Provide dates, amounts, and involved authority</span>
+            <span className="text-xs text-slate-500 font-medium">Provide dates, amounts, and involved authority</span>
           </div>
 
           <textarea
@@ -199,23 +198,23 @@ export const StartCasePage: React.FC = () => {
               if (errorMessage) setErrorMessage('');
             }}
             placeholder={`Tell us what happened in plain words. For example: "I applied for a refund on 12 August, but the company rejected my warranty claim..."`}
-            className={`w-full p-4 rounded-2xl border bg-slate-950/80 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 transition-all backdrop-blur-xl ${
+            className={`w-full p-4 rounded-3xl border bg-white text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 transition-all font-medium ${
               errorMessage
-                ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
-                : 'border-slate-800 focus:border-civic-500 focus:ring-civic-500/20'
+                ? 'border-rose-500 focus:ring-rose-500/20'
+                : 'border-slate-200 focus:border-slate-900 focus:ring-slate-900/10'
             }`}
           />
 
           {errorMessage && (
-            <p className="text-xs font-semibold text-rose-400 flex items-center gap-1 mt-1">
+            <p className="text-xs font-extrabold text-rose-600 flex items-center gap-1 mt-1">
               ⚠️ {errorMessage}
             </p>
           )}
 
           {/* Quick Sample Prompts for Chosen Issue Type */}
           <div className="space-y-2 pt-1">
-            <span className="text-xs font-medium text-slate-400 flex items-center gap-1">
-              <Zap className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-xs font-bold text-slate-500 flex items-center gap-1">
+              <Zap className="w-3.5 h-3.5 text-amber-500" />
               <span>Or tap a common sample problem to auto-fill:</span>
             </span>
             <div className="flex flex-wrap gap-2">
@@ -224,7 +223,7 @@ export const StartCasePage: React.FC = () => {
                   key={idx}
                   type="button"
                   onClick={() => handleQuickSampleClick(sample)}
-                  className="text-xs px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-civic-500/50 transition-all text-left shadow-xs"
+                  className="text-xs px-3.5 py-1.5 rounded-full bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold transition-all text-left shadow-subtle cursor-pointer"
                 >
                   "{sample}"
                 </button>
@@ -235,7 +234,7 @@ export const StartCasePage: React.FC = () => {
 
         {/* Step 3: Optional Evidence File Upload */}
         <div className="space-y-3">
-          <label className="block text-sm font-bold text-slate-200">
+          <label className="block text-sm font-extrabold text-slate-900">
             3. Upload supporting document / screenshot <span className="text-slate-500 font-normal">(Optional)</span>
           </label>
 
@@ -243,12 +242,12 @@ export const StartCasePage: React.FC = () => {
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
-            className={`p-6 sm:p-8 rounded-2xl border-2 border-dashed transition-all text-center flex flex-col items-center justify-center relative cursor-pointer backdrop-blur-xl ${
+            className={`p-6 sm:p-8 rounded-3xl border-2 border-dashed transition-all text-center flex flex-col items-center justify-center relative cursor-pointer ${
               isDragging
-                ? 'border-civic-500 bg-civic-950/40'
+                ? 'border-slate-900 bg-slate-100'
                 : fileName
-                ? 'border-emerald-500/60 bg-emerald-950/20'
-                : 'border-slate-800 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900/80'
+                ? 'border-emerald-500 bg-pastel-mint-light'
+                : 'border-slate-300 bg-white hover:border-slate-400 hover:bg-slate-50'
             }`}
           >
             <input
@@ -260,12 +259,12 @@ export const StartCasePage: React.FC = () => {
 
             {fileName ? (
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center border border-emerald-500/40 shadow-glow-emerald">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center border border-emerald-300">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div className="text-left">
-                  <div className="text-sm font-bold text-white">{fileName}</div>
-                  <div className="text-xs text-emerald-400 font-medium">Ready to attach</div>
+                  <div className="text-sm font-extrabold text-slate-900">{fileName}</div>
+                  <div className="text-xs text-emerald-700 font-bold">Ready to attach</div>
                 </div>
                 <button
                   type="button"
@@ -273,20 +272,20 @@ export const StartCasePage: React.FC = () => {
                     e.stopPropagation();
                     setFileName('');
                   }}
-                  className="p-1 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 ml-3 z-10"
+                  className="p-1 rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 ml-3 z-10"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
             ) : (
               <>
-                <div className="w-12 h-12 rounded-2xl bg-civic-950 text-civic-400 flex items-center justify-center mb-3 border border-civic-500/40 shadow-glow">
+                <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center mb-3">
                   <UploadCloud className="w-6 h-6" />
                 </div>
-                <div className="text-sm font-semibold text-white">
+                <div className="text-sm font-extrabold text-slate-900">
                   Drag & drop your notice, invoice, or screenshot here
                 </div>
-                <div className="text-xs text-slate-500 mt-1">
+                <div className="text-xs text-slate-500 mt-1 font-medium">
                   Supports PDF, PNG, JPEG, DOCX (Up to 25MB)
                 </div>
               </>
@@ -295,29 +294,28 @@ export const StartCasePage: React.FC = () => {
         </div>
 
         {/* Bottom Navigation CTA */}
-        <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-slate-400 flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>CivicGuide ensures confidential diagnostic assistance on your device.</span>
+        <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>RightsTrack ensures confidential diagnostic assistance on your device.</span>
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <Button
+            <button
               type="button"
-              variant="outline"
               onClick={() => navigate('/')}
-              className="flex-1 sm:flex-none border-slate-700 text-slate-300 hover:text-white"
+              className="btn-pill-outline flex-1 sm:flex-none"
             >
               Cancel
-            </Button>
+            </button>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="py-3 px-6 rounded-xl bg-gradient-to-r from-civic-600 via-blue-600 to-indigo-600 hover:from-civic-500 hover:to-indigo-500 text-white font-bold text-sm shadow-glow flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-none"
+              className="btn-black py-3 px-6 text-sm flex-1 sm:flex-none"
             >
               <span>Continue to AI Intake</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowUpRight className="w-4 h-4" />
             </motion.button>
           </div>
         </div>
@@ -325,4 +323,5 @@ export const StartCasePage: React.FC = () => {
     </div>
   );
 };
+
 

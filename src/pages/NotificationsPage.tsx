@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { useCivicData } from '../context/CivicDataContext';
 import { NotificationItemCard } from '../components/cards/NotificationItemCard';
 import { EmptyState } from '../components/common/EmptyState';
-import { Button } from '../components/common/Button';
 import { 
   Bell, 
-  CheckCheck, 
-  Sparkles
+  CheckCheck
 } from 'lucide-react';
 import { NotificationItem } from '../types';
 
@@ -22,41 +19,39 @@ export const NotificationsPage: React.FC = () => {
   });
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn text-slate-100">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn text-slate-900">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-civic-950 text-civic-300 border border-civic-500/40 text-xs font-semibold uppercase tracking-wider mb-3 shadow-glow">
-            <Bell className="w-3.5 h-3.5 text-civic-400" />
+          <span className="editorial-pill mb-3">
+            <Bell className="w-3.5 h-3.5 text-slate-900" />
             <span>Statutory Alerts & Case Feeds</span>
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight leading-tight mt-1">
             Notifications ({notifications.length})
           </h1>
-          <p className="text-sm text-slate-300 mt-1 leading-relaxed">
+          <p className="text-sm text-slate-500 mt-1 leading-relaxed font-medium">
             Real-time deadline countdown alerts, document ready notices, and escalation reminders.
           </p>
         </div>
 
         {unreadCount > 0 && (
-          <Button
-            size="sm"
-            variant="outline"
+          <button
             onClick={markAllNotificationsRead}
-            leftIcon={<CheckCheck className="w-4 h-4 text-civic-400" />}
-            className="border-slate-700 text-slate-300 hover:text-white"
+            className="btn-pill-outline text-xs flex items-center gap-1.5 shrink-0"
           >
-            Mark All as Read
-          </Button>
+            <CheckCheck className="w-4 h-4 text-slate-900" />
+            <span>Mark All as Read</span>
+          </button>
         )}
       </div>
 
       {/* Filter Tabs */}
-      <div className="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 shadow-2xl flex items-center gap-2 overflow-x-auto backdrop-blur-xl">
+      <div className="bg-white p-3 rounded-full border border-slate-200 shadow-card flex items-center gap-2 overflow-x-auto">
         <button
           onClick={() => setFilter('all')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
-            filter === 'all' ? 'bg-slate-800 text-white border border-slate-700 shadow-glow' : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800/80'
+          className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold shrink-0 transition-all cursor-pointer ${
+            filter === 'all' ? 'bg-slate-900 text-white shadow-pill' : 'bg-slate-100 text-slate-600 hover:text-slate-900'
           }`}
         >
           All ({notifications.length})
@@ -64,8 +59,8 @@ export const NotificationsPage: React.FC = () => {
 
         <button
           onClick={() => setFilter('unread')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
-            filter === 'unread' ? 'bg-rose-600 text-white shadow-glow-rose' : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800/80'
+          className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold shrink-0 transition-all cursor-pointer ${
+            filter === 'unread' ? 'bg-pastel-coral text-slate-950 border border-rose-300' : 'bg-slate-100 text-slate-600 hover:text-slate-900'
           }`}
         >
           Unread ({unreadCount})
@@ -73,8 +68,8 @@ export const NotificationsPage: React.FC = () => {
 
         <button
           onClick={() => setFilter('deadline')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
-            filter === 'deadline' ? 'bg-amber-600 text-white shadow-glow-amber' : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800/80'
+          className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold shrink-0 transition-all cursor-pointer ${
+            filter === 'deadline' ? 'bg-pastel-yellow text-slate-950 border border-amber-300' : 'bg-slate-100 text-slate-600 hover:text-slate-900'
           }`}
         >
           Deadlines
@@ -82,8 +77,8 @@ export const NotificationsPage: React.FC = () => {
 
         <button
           onClick={() => setFilter('document')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
-            filter === 'document' ? 'bg-civic-600 text-white shadow-glow' : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800/80'
+          className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold shrink-0 transition-all cursor-pointer ${
+            filter === 'document' ? 'bg-pastel-blue text-slate-950 border border-blue-300' : 'bg-slate-100 text-slate-600 hover:text-slate-900'
           }`}
         >
           Documents
@@ -91,8 +86,8 @@ export const NotificationsPage: React.FC = () => {
 
         <button
           onClick={() => setFilter('submission')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
-            filter === 'submission' ? 'bg-cyan-600 text-white shadow-glow' : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800/80'
+          className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold shrink-0 transition-all cursor-pointer ${
+            filter === 'submission' ? 'bg-pastel-mint text-slate-950 border border-emerald-300' : 'bg-slate-100 text-slate-600 hover:text-slate-900'
           }`}
         >
           Submissions
@@ -100,8 +95,8 @@ export const NotificationsPage: React.FC = () => {
 
         <button
           onClick={() => setFilter('escalation')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
-            filter === 'escalation' ? 'bg-purple-600 text-white shadow-glow-indigo' : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800/80'
+          className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold shrink-0 transition-all cursor-pointer ${
+            filter === 'escalation' ? 'bg-pastel-purple text-slate-950 border border-purple-300' : 'bg-slate-100 text-slate-600 hover:text-slate-900'
           }`}
         >
           Escalations
@@ -131,4 +126,5 @@ export const NotificationsPage: React.FC = () => {
     </div>
   );
 };
+
 

@@ -6,9 +6,7 @@ import {
   FileText, 
   Send, 
   AlertTriangle, 
-  Check, 
   ArrowRight, 
-  ShieldAlert, 
   Bell 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -29,15 +27,15 @@ export const NotificationItemCard: React.FC<NotificationItemCardProps> = ({
   const getIcon = () => {
     switch (notification.type) {
       case 'deadline':
-        return <Clock className="w-4 h-4 text-amber-400" />;
+        return <Clock className="w-4 h-4 text-amber-600" />;
       case 'document':
-        return <FileText className="w-4 h-4 text-civic-400" />;
+        return <FileText className="w-4 h-4 text-blue-600" />;
       case 'submission':
-        return <Send className="w-4 h-4 text-cyan-400" />;
+        return <Send className="w-4 h-4 text-cyan-600" />;
       case 'escalation':
-        return <AlertTriangle className="w-4 h-4 text-purple-400" />;
+        return <AlertTriangle className="w-4 h-4 text-purple-600" />;
       default:
-        return <Bell className="w-4 h-4 text-blue-400" />;
+        return <Bell className="w-4 h-4 text-slate-700" />;
     }
   };
 
@@ -55,15 +53,15 @@ export const NotificationItemCard: React.FC<NotificationItemCardProps> = ({
       whileHover={{ y: -2, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
       onClick={handleClick}
-      className={`p-4 rounded-2xl border transition-all duration-200 cursor-pointer flex items-start justify-between gap-3 group backdrop-blur-xl ${
+      className={`p-4 rounded-3xl border transition-all duration-200 cursor-pointer flex items-start justify-between gap-3 group ${
         notification.read
-          ? 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700 opacity-75 hover:opacity-100'
-          : 'bg-slate-900/90 border-civic-500/40 hover:border-civic-500 shadow-glow'
+          ? 'bg-white/80 border-slate-200 text-slate-700 opacity-80 hover:opacity-100 shadow-subtle'
+          : 'bg-white border-slate-900 shadow-card text-slate-900'
       } ${className}`}
     >
       <div className="flex items-start gap-3.5 min-w-0">
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${
-          notification.read ? 'bg-slate-950 border-slate-800 text-slate-500' : 'bg-civic-950 border-civic-500/40 text-civic-400 shadow-glow'
+        <div className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 border ${
+          notification.read ? 'bg-slate-100 border-slate-200 text-slate-500' : 'bg-slate-100 border-slate-300 text-slate-900'
         }`}>
           {getIcon()}
         </div>
@@ -71,27 +69,27 @@ export const NotificationItemCard: React.FC<NotificationItemCardProps> = ({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h4 className={`text-sm leading-snug truncate ${
-              notification.read ? 'font-medium text-slate-300' : 'font-bold text-white'
+              notification.read ? 'font-semibold text-slate-700' : 'font-extrabold text-slate-950'
             }`}>
               {notification.title}
             </h4>
             {!notification.read && (
-              <span className="w-2 h-2 rounded-full bg-civic-400 shrink-0 shadow-glow animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-slate-900 shrink-0" />
             )}
           </div>
 
-          <p className="text-xs text-slate-400 mt-1 leading-relaxed line-clamp-2">
+          <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2 font-medium">
             {notification.message}
           </p>
 
-          <span className="text-[11px] text-slate-500 mt-2 block font-medium">
+          <span className="text-[11px] text-slate-400 mt-2 block font-semibold">
             {notification.timestamp}
           </span>
         </div>
       </div>
 
       <div className="flex items-center gap-1 shrink-0 self-center">
-        <span className="text-xs font-semibold text-civic-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
+        <span className="text-xs font-extrabold text-slate-900 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">
           View
           <ArrowRight className="w-3.5 h-3.5" />
         </span>
@@ -99,4 +97,5 @@ export const NotificationItemCard: React.FC<NotificationItemCardProps> = ({
     </motion.div>
   );
 };
+
 

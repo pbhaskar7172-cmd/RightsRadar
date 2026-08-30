@@ -5,14 +5,11 @@ import {
   FileText, 
   Image as ImageIcon, 
   Film, 
-  FileCheck, 
   Trash2, 
   Eye, 
-  Download, 
   Paperclip,
   CheckCircle2
 } from 'lucide-react';
-import { Button } from '../common/Button';
 
 interface EvidenceCardProps {
   evidence: EvidenceItem;
@@ -39,30 +36,30 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
   };
 
   const getFileIcon = (type: string) => {
-    if (type.includes('PDF') || type.includes('Document')) return <FileText className="w-5 h-5 text-rose-400" />;
-    if (type.includes('Image') || type.includes('JPEG') || type.includes('PNG')) return <ImageIcon className="w-5 h-5 text-blue-400" />;
-    if (type.includes('Video')) return <Film className="w-5 h-5 text-purple-400" />;
-    return <Paperclip className="w-5 h-5 text-slate-400" />;
+    if (type.includes('PDF') || type.includes('Document')) return <FileText className="w-5 h-5 text-rose-600" />;
+    if (type.includes('Image') || type.includes('JPEG') || type.includes('PNG')) return <ImageIcon className="w-5 h-5 text-blue-600" />;
+    if (type.includes('Video')) return <Film className="w-5 h-5 text-purple-600" />;
+    return <Paperclip className="w-5 h-5 text-slate-700" />;
   };
 
   return (
     <motion.div 
       whileHover={{ y: -4, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
-      className={`p-4 rounded-2xl bg-slate-900/85 hover:bg-slate-850/90 border border-slate-800/90 hover:border-civic-500/50 shadow-elevated hover:shadow-glow flex flex-col justify-between group transition-all duration-200 backdrop-blur-xl ${className}`}
+      className={`p-6 rounded-3xl bg-white border border-slate-200 shadow-card hover:shadow-elevated flex flex-col justify-between group transition-all duration-200 ${className}`}
     >
       <div>
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
               {getFileIcon(evidence.fileType)}
             </div>
 
             <div className="min-w-0">
-              <h4 className="text-sm font-bold text-white truncate group-hover:text-civic-300 transition-colors" title={evidence.name}>
+              <h4 className="text-sm font-extrabold text-slate-950 truncate" title={evidence.name}>
                 {evidence.name}
               </h4>
-              <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5 font-medium">
+              <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5 font-medium">
                 <span>{evidence.size}</span>
                 <span>•</span>
                 <span>{evidence.fileType}</span>
@@ -70,45 +67,43 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
             </div>
           </div>
 
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40 shrink-0 shadow-glow-emerald">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+          <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-slate-950 bg-pastel-mint px-2.5 py-0.5 rounded-full border border-emerald-300 shrink-0">
+            <CheckCircle2 className="w-3 h-3 text-emerald-700" />
             Verified
           </span>
         </div>
 
         {/* Category tag */}
         <div className="mt-3 flex items-center gap-2">
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 border border-slate-800">
+          <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
             {getCategoryLabel(evidence.category)}
           </span>
-          <span className="text-[11px] text-slate-500">
+          <span className="text-[11px] text-slate-400 font-medium">
             Uploaded {evidence.uploadDate}
           </span>
         </div>
 
         {evidence.notes && (
-          <p className="mt-2.5 text-xs text-slate-300 bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 leading-relaxed">
+          <p className="mt-3 text-xs text-slate-700 bg-slate-50 p-3 rounded-2xl border border-slate-200/80 leading-relaxed font-medium">
             {evidence.notes}
           </p>
         )}
       </div>
 
       {/* Action footer */}
-      <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-        <Button
-          size="sm"
-          variant="ghost"
+      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+        <button
           onClick={() => onPreview && onPreview(evidence)}
-          leftIcon={<Eye className="w-3.5 h-3.5" />}
-          className="text-xs text-slate-300 hover:text-white hover:bg-slate-800"
+          className="btn-pill-outline text-xs flex items-center gap-1"
         >
-          Inspect
-        </Button>
+          <Eye className="w-3.5 h-3.5" />
+          <span>Inspect</span>
+        </button>
 
         {onDelete && (
           <button
             onClick={() => onDelete(evidence.id)}
-            className="text-xs text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors flex items-center gap-1"
+            className="text-xs text-slate-400 hover:text-rose-600 p-1.5 rounded-full hover:bg-rose-50 transition-colors flex items-center gap-1 font-extrabold cursor-pointer"
             title="Delete evidence"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -119,4 +114,5 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
     </motion.div>
   );
 };
+
 

@@ -62,7 +62,7 @@ export const Modal: React.FC<ModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity"
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
           />
 
           {/* Modal Card */}
@@ -71,25 +71,25 @@ export const Modal: React.FC<ModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className={`relative w-full ${sizeClasses} bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-800 shadow-glow overflow-hidden z-10 my-8 text-slate-100`}
+            className={`relative w-full ${sizeClasses} bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 my-8 text-slate-900`}
           >
             {/* Header */}
             {(title || showCloseButton) && (
-              <div className="flex items-start justify-between p-5 sm:p-6 border-b border-slate-800 bg-slate-950/60">
+              <div className="flex items-start justify-between p-5 sm:p-6 border-b border-slate-100 bg-slate-50/70">
                 <div>
                   {title && (
-                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <h3 className="text-lg font-black text-slate-950 flex items-center gap-2">
                       {title}
                     </h3>
                   )}
                   {description && (
-                    <p className="mt-1 text-xs text-slate-400">{description}</p>
+                    <p className="mt-1 text-xs text-slate-500 font-medium">{description}</p>
                   )}
                 </div>
                 {showCloseButton && (
                   <button
                     onClick={onClose}
-                    className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors -mr-2 -mt-2"
+                    className="text-slate-400 hover:text-slate-900 p-1.5 rounded-full hover:bg-slate-200 transition-colors -mr-2 -mt-2 cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -107,4 +107,5 @@ export const Modal: React.FC<ModalProps> = ({
     </AnimatePresence>
   );
 };
+
 

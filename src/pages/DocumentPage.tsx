@@ -12,11 +12,11 @@ import {
   ArrowLeft, 
   Scale, 
   Sparkles, 
-  Check 
+  Check,
+  ArrowUpRight
 } from 'lucide-react';
 import { useCivicData } from '../context/CivicDataContext';
 import { DOCUMENT_TEMPLATES } from '../data/mockTemplates';
-import { Button } from '../components/common/Button';
 import { StatusBadge } from '../components/common/StatusBadge';
 
 export const DocumentPage: React.FC = () => {
@@ -52,11 +52,11 @@ export const DocumentPage: React.FC = () => {
 
   if (!activeDoc || !activeCase) {
     return (
-      <div className="p-12 text-center bg-slate-900 rounded-3xl border border-slate-800 text-white">
-        <FileText className="w-12 h-12 text-slate-500 mx-auto mb-3" />
+      <div className="p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-900 shadow-card">
+        <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
         <h3 className="text-lg font-bold">No document found</h3>
-        <p className="text-xs text-slate-400 mt-1 mb-4">Please select a case to generate formal documents.</p>
-        <Button onClick={() => navigate('/cases')}>Go to My Cases</Button>
+        <p className="text-xs text-slate-500 mt-1 mb-4 font-medium">Please select a case to generate formal documents.</p>
+        <button className="btn-black" onClick={() => navigate('/cases')}>Go to My Cases</button>
       </div>
     );
   }
@@ -116,79 +116,71 @@ export const DocumentPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 animate-fadeIn text-slate-100">
+    <div className="max-w-6xl mx-auto space-y-8 animate-fadeIn text-slate-900">
       {/* Top Header Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 no-print">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
             <button
               onClick={() => navigate(`/cases/${activeCase.id}`)}
-              className="text-xs text-slate-400 hover:text-civic-400 font-semibold flex items-center gap-1 transition-colors"
+              className="text-xs text-slate-500 hover:text-slate-900 font-extrabold flex items-center gap-1 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Case</span>
             </button>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-300">•</span>
             <StatusBadge issueType={activeDoc.issueType} size="sm" />
-            <span className="text-xs text-slate-500 font-mono">v{activeDoc.version}</span>
+            <span className="text-xs text-slate-500 font-mono font-bold">v{activeDoc.version}</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight leading-snug">
             Document Review & Formal Drafting
           </h1>
         </div>
 
         {/* Action Buttons Toolbar */}
         <div className="flex flex-wrap items-center gap-2.5">
-          <Button
-            size="sm"
-            variant="outline"
+          <button
             onClick={handleCopy}
-            leftIcon={isCopiedToast ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-            className="border-slate-700 text-slate-300 hover:text-white"
+            className="btn-pill-outline text-xs flex items-center gap-1.5"
           >
-            {isCopiedToast ? 'Copied!' : 'Copy Text'}
-          </Button>
+            {isCopiedToast ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+            <span>{isCopiedToast ? 'Copied!' : 'Copy Text'}</span>
+          </button>
 
-          <Button
-            size="sm"
-            variant="outline"
+          <button
             onClick={handlePrint}
-            leftIcon={<Printer className="w-3.5 h-3.5" />}
-            className="border-slate-700 text-slate-300 hover:text-white"
+            className="btn-pill-outline text-xs flex items-center gap-1.5"
           >
-            Print / PDF
-          </Button>
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print / PDF</span>
+          </button>
 
-          <Button
-            size="sm"
-            variant="outline"
+          <button
             onClick={handleRegenerate}
-            isLoading={isRegenerating}
-            leftIcon={<RotateCw className="w-3.5 h-3.5" />}
-            className="border-slate-700 text-slate-300 hover:text-white"
+            disabled={isRegenerating}
+            className="btn-pill-outline text-xs flex items-center gap-1.5 disabled:opacity-50"
           >
-            Regenerate
-          </Button>
+            <RotateCw className={`w-3.5 h-3.5 ${isRegenerating ? 'animate-spin' : ''}`} />
+            <span>{isRegenerating ? 'Regenerating...' : 'Regenerate'}</span>
+          </button>
 
-          <Button
-            size="sm"
-            variant="secondary"
+          <button
             onClick={handleSave}
-            leftIcon={<Save className="w-3.5 h-3.5" />}
-            className="bg-slate-800 hover:bg-slate-700 text-slate-200"
+            className="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-900 font-extrabold text-xs flex items-center gap-1.5 cursor-pointer transition-colors"
           >
-            Save Draft
-          </Button>
+            <Save className="w-3.5 h-3.5" />
+            <span>Save Draft</span>
+          </button>
 
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleMarkAsReady}
-            className="py-2 px-4 rounded-xl bg-gradient-to-r from-civic-600 via-blue-600 to-indigo-600 hover:from-civic-500 hover:to-indigo-500 text-white font-bold text-xs shadow-glow flex items-center gap-1.5 cursor-pointer"
+            className="btn-black py-2 px-4 text-xs flex items-center gap-1.5"
           >
             <span>Mark Ready & Dispatch</span>
-            <Send className="w-3.5 h-3.5" />
+            <ArrowUpRight className="w-3.5 h-3.5" />
           </motion.button>
         </div>
       </div>
@@ -198,10 +190,10 @@ export const DocumentPage: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-3.5 bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 rounded-2xl text-xs font-semibold flex items-center justify-between shadow-glow-emerald no-print backdrop-blur-xl"
+          className="p-3.5 bg-pastel-mint text-slate-950 border border-emerald-300 rounded-2xl text-xs font-bold flex items-center justify-between no-print shadow-subtle"
         >
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-700" />
             <span>Document changes successfully saved to your local case repository.</span>
           </div>
         </motion.div>
@@ -211,47 +203,47 @@ export const DocumentPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Left 3 Cols: Realistic Formal Document Paper */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="bg-slate-900/95 rounded-3xl border border-slate-800 shadow-2xl p-6 sm:p-10 relative backdrop-blur-2xl">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-card p-6 sm:p-10 relative">
             {/* Watermark / Legal Header Stamp */}
-            <div className="flex items-start justify-between pb-6 border-b border-slate-800 mb-6">
+            <div className="flex items-start justify-between pb-6 border-b border-slate-100 mb-6">
               <div className="flex-1 mr-4">
                 <input
                   type="text"
                   value={docTitle}
                   onChange={(e) => setDocTitle(e.target.value)}
-                  className="text-lg sm:text-xl font-bold text-white bg-transparent border-b border-transparent hover:border-slate-700 focus:border-civic-500 outline-none w-full pb-0.5"
+                  className="text-lg sm:text-xl font-black text-slate-950 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-slate-900 outline-none w-full pb-0.5"
                   title="Click to edit document title"
                 />
-                <p className="text-xs text-slate-400 font-mono mt-1">
+                <p className="text-xs text-slate-400 font-mono mt-1 font-semibold">
                   Reference: {activeDoc.referenceNumber || `#${activeDoc.id}`}
                 </p>
               </div>
 
               <div className="text-right shrink-0">
-                <span className="text-[11px] uppercase font-bold text-civic-300 bg-civic-950 px-2.5 py-1 rounded-lg border border-civic-500/40 shadow-glow">
+                <span className="editorial-pill">
                   Statutory Draft Notice
                 </span>
-                <span className="block text-[10px] text-slate-500 mt-1">
+                <span className="block text-[10px] text-slate-400 mt-1 font-medium">
                   Citizen Legal Notice Format
                 </span>
               </div>
             </div>
 
             {/* Editable Draft Content Textarea */}
-            <div className="relative font-mono text-xs sm:text-sm text-slate-200 leading-relaxed">
+            <div className="relative font-mono text-xs sm:text-sm text-slate-800 leading-relaxed">
               <textarea
                 rows={22}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="w-full p-5 bg-slate-950/90 text-slate-100 placeholder:text-slate-500 rounded-2xl border border-slate-800 focus:border-civic-500 focus:ring-2 focus:ring-civic-500/20 outline-none transition-all resize-y font-mono shadow-inner leading-relaxed"
+                className="w-full p-5 bg-slate-50 text-slate-900 placeholder:text-slate-400 rounded-2xl border border-slate-200 focus:border-slate-900 outline-none transition-all resize-y font-mono shadow-inner leading-relaxed"
                 style={{ minHeight: '480px' }}
               />
             </div>
 
             {/* Non-Governmental Disclaimer Stamp */}
-            <div className="mt-6 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
+            <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2 font-medium">
               <span>RightsTrack Legal Format — Ready to sign and serve via Registered Speed Post / Official Portal</span>
-              <span className="text-slate-400 font-medium">Confidential Citizen Record</span>
+              <span className="text-slate-600 font-bold">Confidential Citizen Record</span>
             </div>
           </div>
         </div>
@@ -259,52 +251,52 @@ export const DocumentPage: React.FC = () => {
         {/* Right 1 Col: Metadata & Instructions Sidebar */}
         <div className="space-y-6 no-print">
           {/* Metadata Card */}
-          <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-4 backdrop-blur-xl">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Scale className="w-4 h-4 text-civic-400" />
+          <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-card space-y-4">
+            <h3 className="text-sm font-black text-slate-950 flex items-center gap-2">
+              <Scale className="w-4 h-4 text-slate-700" />
               <span>Notice Particulars</span>
             </h3>
 
             <div className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-400 font-medium mb-1">Applicant Name</label>
+                <label className="block text-slate-500 font-extrabold mb-1">Applicant Name</label>
                 <input
                   type="text"
                   value={applicantName}
                   onChange={(e) => setApplicantName(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-slate-800 bg-slate-950 text-white focus:border-civic-500 outline-none font-medium"
+                  className="w-full p-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:border-slate-900 outline-none font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 font-medium mb-1">Opposing Entity / Officer</label>
+                <label className="block text-slate-500 font-extrabold mb-1">Opposing Entity / Officer</label>
                 <input
                   type="text"
                   value={authorityName}
                   onChange={(e) => setAuthorityName(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-slate-800 bg-slate-950 text-white focus:border-civic-500 outline-none font-medium"
+                  className="w-full p-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:border-slate-900 outline-none font-medium"
                 />
               </div>
             </div>
           </div>
 
           {/* Statutory Filing Advice */}
-          <div className="p-5 rounded-3xl bg-blue-950/40 border border-blue-500/30 space-y-3 shadow-glow backdrop-blur-xl">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-blue-300 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+          <div className="p-6 rounded-3xl bg-pastel-blue-light border border-blue-200 space-y-3">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-blue-900 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-blue-700" />
               <span>Serving Instructions</span>
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-300 leading-relaxed">
+            <ul className="space-y-2.5 text-xs text-slate-700 leading-relaxed font-medium">
               <li className="flex items-start gap-2">
-                <span className="font-bold text-blue-400">1.</span>
+                <span className="font-extrabold text-blue-900">1.</span>
                 <span>Print or export this notice, sign physically, and attach photocopies of supporting invoices/IDs.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="font-bold text-blue-400">2.</span>
+                <span className="font-extrabold text-blue-900">2.</span>
                 <span>Send via <strong>Registered Speed Post with AD</strong> or upload to the official ministry/company portal.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="font-bold text-blue-400">3.</span>
+                <span className="font-extrabold text-blue-900">3.</span>
                 <span>Keep the postal receipt barcode to record your statutory submission timestamp.</span>
               </li>
             </ul>
@@ -314,4 +306,5 @@ export const DocumentPage: React.FC = () => {
     </div>
   );
 };
+
 

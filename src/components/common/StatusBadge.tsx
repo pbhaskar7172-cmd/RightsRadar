@@ -15,9 +15,7 @@ import {
   ShoppingBag,
   Home,
   Briefcase,
-  Landmark,
-  ShieldCheck,
-  Sparkles
+  Landmark
 } from 'lucide-react';
 
 interface StatusBadgeProps {
@@ -42,9 +40,9 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   className = '',
 }) => {
   const sizeClasses = {
-    sm: 'text-[11px] px-2.5 py-0.5 gap-1 font-semibold',
-    md: 'text-xs px-3 py-1 gap-1.5 font-semibold',
-    lg: 'text-sm px-3.5 py-1.5 gap-2 font-bold',
+    sm: 'text-[11px] px-2.5 py-0.5 gap-1 font-bold',
+    md: 'text-xs px-3 py-1 gap-1.5 font-bold',
+    lg: 'text-sm px-3.5 py-1.5 gap-2 font-extrabold',
   }[size];
 
   // 1. Issue Type Badge
@@ -52,27 +50,27 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     const config = ISSUE_TYPES[issueType];
     const getIcon = () => {
       switch (issueType) {
-        case 'rti': return <FileSearch className="w-3.5 h-3.5 text-blue-400" />;
-        case 'consumer': return <ShoppingBag className="w-3.5 h-3.5 text-emerald-400" />;
-        case 'tenant': return <Home className="w-3.5 h-3.5 text-amber-400" />;
-        case 'workplace': return <Briefcase className="w-3.5 h-3.5 text-purple-400" />;
-        case 'govt_scheme': return <Landmark className="w-3.5 h-3.5 text-cyan-400" />;
-        case 'cyber': return <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />;
+        case 'rti': return <FileSearch className="w-3.5 h-3.5 text-blue-700" />;
+        case 'consumer': return <ShoppingBag className="w-3.5 h-3.5 text-emerald-700" />;
+        case 'tenant': return <Home className="w-3.5 h-3.5 text-amber-700" />;
+        case 'workplace': return <Briefcase className="w-3.5 h-3.5 text-purple-700" />;
+        case 'govt_scheme': return <Landmark className="w-3.5 h-3.5 text-cyan-700" />;
+        case 'cyber': return <ShieldAlert className="w-3.5 h-3.5 text-rose-700" />;
         default: return <HelpCircle className="w-3.5 h-3.5" />;
       }
     };
 
     const domainStyleMap: Record<IssueTypeId, string> = {
-      rti: 'bg-blue-950/80 text-blue-300 border-blue-500/40 shadow-glow',
-      consumer: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40 shadow-glow-emerald',
-      tenant: 'bg-amber-950/80 text-amber-300 border-amber-500/40 shadow-glow-amber',
-      workplace: 'bg-purple-950/80 text-purple-300 border-purple-500/40 shadow-glow-indigo',
-      govt_scheme: 'bg-cyan-950/80 text-cyan-300 border-cyan-500/40',
-      cyber: 'bg-rose-950/80 text-rose-300 border-rose-500/40 shadow-glow-rose',
+      rti: 'bg-pastel-blue text-slate-900 border-blue-200/80',
+      consumer: 'bg-pastel-yellow text-slate-900 border-amber-200/80',
+      tenant: 'bg-pastel-coral text-slate-900 border-orange-200/80',
+      workplace: 'bg-pastel-purple text-slate-900 border-purple-200/80',
+      govt_scheme: 'bg-pastel-mint text-slate-900 border-emerald-200/80',
+      cyber: 'bg-pastel-pink text-slate-900 border-rose-200/80',
     };
 
     return (
-      <span className={`inline-flex items-center rounded-full border backdrop-blur-md ${domainStyleMap[issueType] || 'bg-slate-900 text-slate-300 border-slate-700'} ${sizeClasses} ${className}`}>
+      <span className={`inline-flex items-center rounded-full border shadow-subtle ${domainStyleMap[issueType] || 'bg-slate-100 text-slate-800 border-slate-200'} ${sizeClasses} ${className}`}>
         {showIcon && getIcon()}
         <span>{customLabel || config.shortName}</span>
       </span>
@@ -84,29 +82,29 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     switch (deadlineStatus) {
       case 'due_soon':
         return (
-          <span className={`inline-flex items-center rounded-full bg-amber-950/90 text-amber-300 border border-amber-500/50 shadow-glow-amber ${sizeClasses} ${className}`}>
-            {showIcon && <AlertTriangle className="w-3.5 h-3.5 text-amber-400 animate-pulse" />}
+          <span className={`inline-flex items-center rounded-full bg-pastel-yellow text-slate-900 border border-amber-300 shadow-subtle ${sizeClasses} ${className}`}>
+            {showIcon && <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />}
             <span>{customLabel || 'Due Soon'}</span>
           </span>
         );
       case 'overdue':
         return (
-          <span className={`inline-flex items-center rounded-full bg-rose-950/90 text-rose-300 border border-rose-500/50 shadow-glow-rose ${sizeClasses} ${className}`}>
-            {showIcon && <AlertCircle className="w-3.5 h-3.5 text-rose-400 animate-ping" />}
+          <span className={`inline-flex items-center rounded-full bg-pastel-coral text-slate-900 border border-rose-300 shadow-subtle ${sizeClasses} ${className}`}>
+            {showIcon && <AlertCircle className="w-3.5 h-3.5 text-rose-700" />}
             <span>{customLabel || 'Overdue'}</span>
           </span>
         );
       case 'completed':
         return (
-          <span className={`inline-flex items-center rounded-full bg-slate-900 text-slate-400 border border-slate-700 ${sizeClasses} ${className}`}>
-            {showIcon && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+          <span className={`inline-flex items-center rounded-full bg-pastel-mint text-slate-900 border border-emerald-300 shadow-subtle ${sizeClasses} ${className}`}>
+            {showIcon && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />}
             <span>{customLabel || 'Completed'}</span>
           </span>
         );
       default:
         return (
-          <span className={`inline-flex items-center rounded-full bg-blue-950/80 text-blue-300 border border-blue-500/40 ${sizeClasses} ${className}`}>
-            {showIcon && <Clock className="w-3.5 h-3.5 text-blue-400" />}
+          <span className={`inline-flex items-center rounded-full bg-pastel-blue text-slate-900 border border-blue-300 shadow-subtle ${sizeClasses} ${className}`}>
+            {showIcon && <Clock className="w-3.5 h-3.5 text-blue-700" />}
             <span>{customLabel || 'Upcoming'}</span>
           </span>
         );
@@ -116,15 +114,15 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   // 3. Priority Badge
   if (priority) {
     const priorityConfig = {
-      low: { bg: 'bg-slate-900 text-slate-400 border-slate-800', label: 'Low Priority' },
-      medium: { bg: 'bg-blue-950/80 text-blue-300 border-blue-500/30', label: 'Standard' },
-      high: { bg: 'bg-amber-950/80 text-amber-300 border-amber-500/40 shadow-glow-amber', label: 'High Priority' },
-      urgent: { bg: 'bg-rose-950/90 text-rose-300 border-rose-500/50 shadow-glow-rose', label: 'Urgent Action' },
+      low: { bg: 'bg-slate-100 text-slate-700 border-slate-200', label: 'Low Priority' },
+      medium: { bg: 'bg-pastel-blue text-slate-900 border-blue-200', label: 'Standard' },
+      high: { bg: 'bg-pastel-yellow text-slate-900 border-amber-300', label: 'High Priority' },
+      urgent: { bg: 'bg-pastel-coral text-slate-900 border-rose-300', label: 'Urgent Action' },
     }[priority];
 
     return (
-      <span className={`inline-flex items-center rounded-full border ${priorityConfig.bg} ${sizeClasses} ${className}`}>
-        <span className={`w-1.5 h-1.5 rounded-full ${priority === 'urgent' ? 'bg-rose-400 animate-ping' : 'bg-current'}`} />
+      <span className={`inline-flex items-center rounded-full border shadow-subtle ${priorityConfig.bg} ${sizeClasses} ${className}`}>
+        <span className={`w-1.5 h-1.5 rounded-full ${priority === 'urgent' ? 'bg-rose-600 animate-ping' : 'bg-slate-800'}`} />
         <span>{customLabel || priorityConfig.label}</span>
       </span>
     );
@@ -133,54 +131,55 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   // 4. Case Status Badge
   const statusConfigMap: Record<CaseStatus, { bg: string; label: string; icon: React.ReactNode }> = {
     created: {
-      bg: 'bg-slate-900 text-slate-400 border-slate-800',
+      bg: 'bg-slate-100 text-slate-800 border-slate-200',
       label: 'Drafting',
-      icon: <FileText className="w-3.5 h-3.5 text-slate-400" />
+      icon: <FileText className="w-3.5 h-3.5 text-slate-600" />
     },
     info_collected: {
-      bg: 'bg-indigo-950/80 text-indigo-300 border-indigo-500/40 shadow-glow-indigo',
+      bg: 'bg-pastel-purple text-slate-900 border-purple-200',
       label: 'Intake Done',
-      icon: <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
+      icon: <CheckCircle2 className="w-3.5 h-3.5 text-purple-700" />
     },
     action_recommended: {
-      bg: 'bg-civic-950/80 text-civic-300 border-civic-500/40 shadow-glow',
+      bg: 'bg-pastel-blue text-slate-900 border-blue-200',
       label: 'Action Recommended',
-      icon: <ArrowUpRight className="w-3.5 h-3.5 text-civic-400" />
+      icon: <ArrowUpRight className="w-3.5 h-3.5 text-blue-700" />
     },
     document_prepared: {
-      bg: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40 shadow-glow-emerald',
+      bg: 'bg-pastel-mint text-slate-900 border-emerald-200',
       label: 'Notice Ready',
-      icon: <FileText className="w-3.5 h-3.5 text-emerald-400" />
+      icon: <FileText className="w-3.5 h-3.5 text-emerald-700" />
     },
     submission_recorded: {
-      bg: 'bg-cyan-950/80 text-cyan-300 border-cyan-500/40',
+      bg: 'bg-pastel-blue text-slate-900 border-blue-200',
       label: 'Dispatched',
-      icon: <Send className="w-3.5 h-3.5 text-cyan-400" />
+      icon: <Send className="w-3.5 h-3.5 text-blue-700" />
     },
     response_pending: {
-      bg: 'bg-amber-950/80 text-amber-300 border-amber-500/40 shadow-glow-amber',
+      bg: 'bg-pastel-yellow text-slate-900 border-amber-300',
       label: 'Response Pending',
-      icon: <Clock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+      icon: <Clock className="w-3.5 h-3.5 text-amber-700" />
     },
     escalation: {
-      bg: 'bg-purple-950/80 text-purple-300 border-purple-500/40 shadow-glow-indigo',
+      bg: 'bg-pastel-coral text-slate-900 border-rose-300',
       label: 'Escalated Tier',
-      icon: <AlertTriangle className="w-3.5 h-3.5 text-purple-400" />
+      icon: <AlertTriangle className="w-3.5 h-3.5 text-rose-700" />
     },
     resolved: {
-      bg: 'bg-emerald-950 text-emerald-300 border-emerald-500 shadow-glow-emerald',
+      bg: 'bg-pastel-mint text-slate-900 border-emerald-300',
       label: 'Resolved 🎉',
-      icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+      icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
     }
   };
 
   const current = status ? statusConfigMap[status] : statusConfigMap.created;
 
   return (
-    <span className={`inline-flex items-center rounded-full border backdrop-blur-md ${current.bg} ${sizeClasses} ${className}`}>
+    <span className={`inline-flex items-center rounded-full border shadow-subtle ${current.bg} ${sizeClasses} ${className}`}>
       {showIcon && current.icon}
       <span>{customLabel || current.label}</span>
     </span>
   );
 };
+
 

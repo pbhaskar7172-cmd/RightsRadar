@@ -1,49 +1,62 @@
 import React, { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { MobileNav } from './MobileNav';
+import { Shield, Sparkles, Scale, Heart } from 'lucide-react';
 
 export const AppShell: React.FC = () => {
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row font-sans selection:bg-civic-500 selection:text-white relative overflow-x-hidden">
-      {/* Dynamic Ambient Background Glows */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-[35rem] h-[35rem] rounded-full bg-blue-600/10 blur-[130px]" />
-        <div className="absolute top-1/3 -right-40 w-[30rem] h-[30rem] rounded-full bg-indigo-600/10 blur-[140px]" />
-        <div className="absolute -bottom-40 left-1/3 w-[35rem] h-[35rem] rounded-full bg-emerald-600/8 blur-[130px]" />
-        <div className="absolute inset-0 radar-grid opacity-20" />
-      </div>
-
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:block shrink-0 relative z-20">
-        <Sidebar />
-      </div>
-
+    <div className="min-h-screen bg-[#F8F9FA] text-slate-900 flex flex-col font-sans selection:bg-slate-900 selection:text-white relative">
+      {/* Header with Top Navigation Bar */}
+      <Header onOpenMobileMenu={() => setIsMobileDrawerOpen(true)} />
+      
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 pb-20 lg:pb-0 relative z-10">
-        <Header onOpenMobileMenu={() => setIsMobileDrawerOpen(true)} />
-        
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-            >
-              <Outlet />
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      </div>
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 pb-24 lg:pb-12">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
+      </main>
 
-      {/* Mobile Navigation */}
+      {/* Editorial Footer */}
+      <footer className="w-full border-t border-slate-200 bg-white py-8 px-4 sm:px-6 lg:px-8 mt-auto">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-500">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xs">
+              Y
+            </div>
+            <span className="font-extrabold text-slate-900 text-sm tracking-tight">RightsTrack Yojna</span>
+            <span>•</span>
+            <span>Statutory Citizen Rights System</span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <Link to="/sources" className="hover:text-slate-900 transition-colors">Statutory Acts</Link>
+            <Link to="/help" className="hover:text-slate-900 transition-colors">Citizen FAQ</Link>
+            <Link to="/radar" className="hover:text-slate-900 transition-colors">Action Radar</Link>
+            <Link to="/documents" className="hover:text-slate-900 transition-colors">Legal Drafts</Link>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-slate-400">
+            <span>Built for Citizens</span>
+            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+            <span>in India</span>
+          </div>
+        </div>
+      </footer>
+
+      {/* Mobile Navigation Drawer */}
       <MobileNav
         isDrawerOpen={isMobileDrawerOpen}
         onCloseDrawer={() => setIsMobileDrawerOpen(false)}
@@ -51,4 +64,6 @@ export const AppShell: React.FC = () => {
     </div>
   );
 };
+
+
 

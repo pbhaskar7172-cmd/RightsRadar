@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, 
@@ -12,27 +12,39 @@ import {
   ShieldCheck,
   X,
   LogOut,
-  User,
   ChevronDown,
-  Sparkles,
-  Zap
+  FolderKanban,
+  Radar,
+  Paperclip,
+  BookOpen,
+  ArrowUpRight
 } from 'lucide-react';
 import { useCivicData } from '../../context/CivicDataContext';
 import { useAuth, DEMO_ACCOUNTS } from '../../context/AuthContext';
-import { Button } from '../common/Button';
 
 interface HeaderProps {
   onOpenMobileMenu: () => void;
 }
 
+const TOP_NAV_LINKS = [
+  { to: '/', label: 'Dashboard', icon: Compass },
+  { to: '/cases', label: 'My Cases', icon: FolderKanban },
+  { to: '/action-radar', label: 'Action Radar', icon: Radar },
+  { to: '/documents', label: 'Documents', icon: FileText },
+  { to: '/evidence', label: 'Evidence', icon: Paperclip },
+  { to: '/sources', label: 'Sources', icon: BookOpen },
+  { to: '/help', label: 'Help', icon: HelpCircle },
+];
+
 export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
   const { cases, unreadCount, markAllNotificationsRead, notifications } = useCivicData();
   const { user, logout, loginAsDemo } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
-  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const filteredCases = searchQuery.trim()
     ? cases.filter(c => 
@@ -43,278 +55,317 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
     : [];
 
   return (
-    <header className="h-16 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-elevated">
-      {/* Left side: Mobile Menu Button & Search */}
-      <div className="flex items-center gap-3 flex-1 max-w-xl">
-        <button
-          onClick={onOpenMobileMenu}
-          className="lg:hidden p-2 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
-          aria-label="Open Navigation Menu"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
+    <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 px-4 sm:px-6 lg:px-8 shadow-subtle transition-colors">
+      <div className="max-w-7xl mx-auto h-18 flex items-center justify-between gap-4">
+        
+        {/* Left: Brand Logo & Wordmark */}
+        <div className="flex items-center gap-6">
+          <button
+            onClick={onOpenMobileMenu}
+            className="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Open Navigation Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
 
-        {/* Global Search Bar */}
-        <div className="relative w-full max-w-md">
-          <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setShowSearchDropdown(true);
-              }}
-              onFocus={() => setShowSearchDropdown(true)}
-              placeholder="Search cases, RTI, consumer disputes, notices..."
-              className="w-full pl-9 pr-8 py-2 bg-slate-950/70 hover:bg-slate-950 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 rounded-xl border border-slate-800 focus:border-civic-500 focus:ring-2 focus:ring-civic-500/20 transition-all outline-none"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 p-0.5"
+          <NavLink to="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-extrabold text-lg shadow-sm group-hover:scale-105 transition-transform">
+              人
+            </div>
+            <div className="hidden sm:block">
+              <span className="text-base font-extrabold text-slate-900 tracking-tight block leading-tight">
+                RightsTrack
+              </span>
+              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">
+                Citizen Radar
+              </span>
+            </div>
+          </NavLink>
+        </div>
+
+        {/* Center: Top Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {TOP_NAV_LINKS.map(link => {
+            const isActive = location.pathname === link.to;
+            return (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={`relative px-3.5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  isActive 
+                    ? 'text-slate-950 bg-slate-100/90 shadow-pill' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`}
               >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+                <span>{link.label}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="topNavPill"
+                    className="absolute inset-0 bg-slate-100 rounded-full -z-10 border border-slate-200/60"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </NavLink>
+            );
+          })}
+        </nav>
+
+        {/* Right: Actions, Notifications & Profile */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          
+          {/* Quick Search Trigger */}
+          <button
+            onClick={() => setShowSearchModal(true)}
+            className="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            title="Search Cases"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+
+          {/* Notifications Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifDropdown(prev => !prev)}
+              className="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 relative transition-colors"
+              aria-label="Notifications"
+            >
+              <Bell className="w-4 h-4" />
+              {unreadCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 bg-slate-900 text-white rounded-full text-[9px] font-extrabold flex items-center justify-center shadow-sm">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Notification Menu */}
+            <AnimatePresence>
+              {showNotifDropdown && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowNotifDropdown(false)} />
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.96 }}
+                    className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-3xl shadow-elevated border border-slate-200/90 overflow-hidden z-50 p-1"
+                  >
+                    <div className="p-4 bg-slate-50 rounded-t-[22px] border-b border-slate-200/70 flex items-center justify-between">
+                      <div className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                        <span>Statutory Alerts</span>
+                        {unreadCount > 0 && (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 text-white font-bold">
+                            {unreadCount} new
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {unreadCount > 0 && (
+                          <button
+                            onClick={markAllNotificationsRead}
+                            className="text-xs text-slate-600 hover:text-slate-900 font-semibold"
+                          >
+                            Mark read
+                          </button>
+                        )}
+                        <NavLink
+                          to="/notifications"
+                          onClick={() => setShowNotifDropdown(false)}
+                          className="text-xs text-slate-600 hover:text-slate-900 font-medium"
+                        >
+                          View all
+                        </NavLink>
+                      </div>
+                    </div>
+
+                    <div className="max-h-72 overflow-y-auto divide-y divide-slate-100 p-1">
+                      {notifications.slice(0, 4).map(n => (
+                        <div
+                          key={n.id}
+                          onClick={() => {
+                            setShowNotifDropdown(false);
+                            navigate(n.actionUrl);
+                          }}
+                          className={`p-3 text-xs hover:bg-slate-50 rounded-2xl cursor-pointer transition-colors ${
+                            !n.read ? 'bg-blue-50/50 font-medium' : ''
+                          }`}
+                        >
+                          <div className="font-bold text-slate-900 line-clamp-1">{n.title}</div>
+                          <div className="text-slate-500 text-[11px] mt-0.5 line-clamp-2">{n.message}</div>
+                          <div className="text-[10px] text-slate-400 mt-1">{n.timestamp}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Search Results Dropdown */}
-          <AnimatePresence>
-            {showSearchDropdown && searchQuery.trim() && (
-              <>
-                <div 
-                  className="fixed inset-0 z-40" 
-                  onClick={() => setShowSearchDropdown(false)} 
-                />
-                <motion.div 
-                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                  className="absolute left-0 right-0 top-full mt-2 bg-slate-900 rounded-2xl shadow-2xl border border-slate-700/80 overflow-hidden z-50 max-h-80 overflow-y-auto backdrop-blur-xl"
-                >
-                  <div className="p-3 bg-slate-950/80 border-b border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
-                    <span>Search Results</span>
-                    <span className="text-civic-400 font-semibold">{filteredCases.length} found</span>
-                  </div>
+          {/* Solid Black CTA Button: Start Case */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate('/start-case')}
+            className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 hover:bg-black text-white font-bold text-xs shadow-black cursor-pointer"
+          >
+            <span>Start Case</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </motion.button>
 
-                  {filteredCases.length > 0 ? (
-                    <div className="p-2 space-y-1">
-                      {filteredCases.map(c => (
+          {/* User Profile Avatar Pill */}
+          <div className="relative">
+            <button
+              onClick={() => setShowUserMenu(prev => !prev)}
+              className="flex items-center gap-2 p-1 pl-1 pr-2.5 rounded-full hover:bg-slate-100 transition-all border border-slate-200/80 bg-white"
+            >
+              <img
+                src={user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'}
+                alt={user?.name || 'Citizen'}
+                className="w-7 h-7 rounded-full object-cover border border-slate-200"
+              />
+              <span className="text-xs font-bold text-slate-900 hidden md:inline truncate max-w-[80px]">
+                {user?.name?.split(' ')[0] || 'User'}
+              </span>
+              <ChevronDown className="w-3 h-3 text-slate-400" />
+            </button>
+
+            {/* Profile Dropdown Menu */}
+            <AnimatePresence>
+              {showUserMenu && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute right-0 top-full mt-2 w-72 bg-white rounded-3xl shadow-elevated border border-slate-200/90 p-3 z-50"
+                  >
+                    <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 mb-2">
+                      <div className="font-extrabold text-slate-900 text-sm">{user?.name}</div>
+                      <div className="text-[11px] text-slate-500 truncate">{user?.email}</div>
+                      <div className="mt-2 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-white text-[10px] font-bold">
+                        <ShieldCheck className="w-3 h-3" />
+                        <span>{user?.roleTitle}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-[11px] font-bold text-slate-400 px-2 py-1 uppercase tracking-wider">
+                      Switch Persona Profile
+                    </div>
+
+                    <div className="space-y-1 my-1">
+                      {DEMO_ACCOUNTS.map(demo => (
                         <button
-                          key={c.id}
+                          key={demo.id}
                           onClick={() => {
-                            setShowSearchDropdown(false);
-                            setSearchQuery('');
-                            navigate(`/cases/${c.id}`);
+                            loginAsDemo(demo.id);
+                            setShowUserMenu(false);
                           }}
-                          className="w-full text-left p-2.5 rounded-xl hover:bg-slate-800 text-xs text-slate-200 transition-colors flex items-start gap-2.5 group"
+                          className={`w-full text-left p-2 rounded-2xl text-xs flex items-center justify-between transition-all ${
+                            user?.id === demo.id ? 'bg-slate-100 font-bold text-slate-900 border border-slate-200' : 'text-slate-600 hover:bg-slate-50'
+                          }`}
                         >
-                          <FileText className="w-4 h-4 text-civic-400 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                          <div className="min-w-0 flex-1">
-                            <div className="font-bold text-white group-hover:text-civic-300 transition-colors truncate">{c.title}</div>
-                            <div className="text-[11px] text-slate-400 truncate">{c.authorityInvolved}</div>
-                          </div>
+                          <span>{demo.name}</span>
+                          <span className="text-[10px] text-slate-400 capitalize">{demo.role.replace('_', ' ')}</span>
                         </button>
                       ))}
                     </div>
+
+                    <div className="border-t border-slate-100 pt-2 mt-2">
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false);
+                          logout();
+                          navigate('/login');
+                        }}
+                        className="w-full flex items-center gap-2 p-2 rounded-xl text-xs text-rose-600 hover:bg-rose-50 transition-colors font-bold"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Global Search Modal */}
+      <AnimatePresence>
+        {showSearchModal && (
+          <>
+            <div 
+              className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-start justify-center pt-20 px-4"
+              onClick={() => setShowSearchModal(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white w-full max-w-xl rounded-3xl shadow-elevated border border-slate-200/90 overflow-hidden"
+              >
+                <div className="p-4 border-b border-slate-100 flex items-center gap-3">
+                  <Search className="w-5 h-5 text-slate-400" />
+                  <input
+                    type="text"
+                    autoFocus
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search cases, RTI, consumer disputes, notices..."
+                    className="w-full text-sm text-slate-900 placeholder:text-slate-400 outline-none"
+                  />
+                  <button 
+                    onClick={() => setShowSearchModal(false)}
+                    className="p-1 rounded-full text-slate-400 hover:bg-slate-100"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="p-3 max-h-80 overflow-y-auto">
+                  {searchQuery.trim() ? (
+                    filteredCases.length > 0 ? (
+                      <div className="space-y-1">
+                        {filteredCases.map(c => (
+                          <button
+                            key={c.id}
+                            onClick={() => {
+                              setShowSearchModal(false);
+                              setSearchQuery('');
+                              navigate(`/cases/${c.id}`);
+                            }}
+                            className="w-full text-left p-3 rounded-2xl hover:bg-slate-50 text-xs text-slate-700 transition-colors flex items-start gap-3"
+                          >
+                            <FileText className="w-4 h-4 text-slate-900 shrink-0 mt-0.5" />
+                            <div className="min-w-0 flex-1">
+                              <div className="font-bold text-slate-900 truncate">{c.title}</div>
+                              <div className="text-[11px] text-slate-500 truncate">{c.authorityInvolved}</div>
+                            </div>
+                            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="p-6 text-center text-xs text-slate-400">
+                        No cases found for "{searchQuery}".
+                      </div>
+                    )
                   ) : (
                     <div className="p-6 text-center text-xs text-slate-400">
-                      No matching cases found for "{searchQuery}".
+                      Type to search across active and pending cases...
                     </div>
                   )}
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Right side: Action CTAs & Profile */}
-      <div className="flex items-center gap-2 sm:gap-3">
-        {/* Help Link */}
-        <NavLink
-          to="/help"
-          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors hidden sm:flex items-center gap-1.5 text-xs font-medium"
-        >
-          <HelpCircle className="w-4 h-4 text-slate-400" />
-          <span>Guides & FAQs</span>
-        </NavLink>
-
-        {/* Notifications Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setShowNotifDropdown(prev => !prev)}
-            className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 relative transition-colors"
-            aria-label="Notifications"
-          >
-            <Bell className="w-5 h-5" />
-            {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow-glow animate-pulse">
-                {unreadCount}
-              </span>
-            )}
-          </button>
-
-          {/* Quick Notification Overlay */}
-          <AnimatePresence>
-            {showNotifDropdown && (
-              <>
-                <div 
-                  className="fixed inset-0 z-40" 
-                  onClick={() => setShowNotifDropdown(false)} 
-                />
-                <motion.div 
-                  initial={{ opacity: 0, y: 10, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.96 }}
-                  className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-slate-900/95 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden z-50 backdrop-blur-xl"
-                >
-                  <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
-                    <div className="font-bold text-sm text-white flex items-center gap-2">
-                      <span>Notifications</span>
-                      {unreadCount > 0 && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
-                          {unreadCount} new
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {unreadCount > 0 && (
-                        <button
-                          onClick={markAllNotificationsRead}
-                          className="text-[11px] text-civic-400 hover:text-civic-300 font-semibold"
-                        >
-                          Mark all read
-                        </button>
-                      )}
-                      <NavLink
-                        to="/notifications"
-                        onClick={() => setShowNotifDropdown(false)}
-                        className="text-[11px] text-slate-400 hover:text-slate-200"
-                      >
-                        View all
-                      </NavLink>
-                    </div>
-                  </div>
-
-                  <div className="max-h-72 overflow-y-auto divide-y divide-slate-800/60">
-                    {notifications.slice(0, 4).map(n => (
-                      <div
-                        key={n.id}
-                        onClick={() => {
-                          setShowNotifDropdown(false);
-                          navigate(n.actionUrl);
-                        }}
-                        className={`p-3.5 text-xs hover:bg-slate-800/80 cursor-pointer transition-colors ${
-                          !n.read ? 'bg-civic-950/40 font-medium' : ''
-                        }`}
-                      >
-                        <div className="font-bold text-slate-100 line-clamp-1">{n.title}</div>
-                        <div className="text-slate-400 text-[11px] mt-0.5 line-clamp-2">{n.message}</div>
-                        <div className="text-[10px] text-slate-500 mt-1.5">{n.timestamp}</div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Start Case Header Action */}
-        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-          <Button
-            size="sm"
-            variant="primary"
-            onClick={() => navigate('/start-case')}
-            leftIcon={<PlusCircle className="w-4 h-4" />}
-            className="hidden sm:inline-flex bg-gradient-to-r from-civic-600 to-indigo-600 hover:from-civic-500 hover:to-indigo-500 shadow-glow"
-          >
-            New Case
-          </Button>
-        </motion.div>
-
-        {/* User Profile Menu */}
-        <div className="relative">
-          <button
-            onClick={() => setShowUserMenu(prev => !prev)}
-            className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-800 transition-all border border-transparent hover:border-slate-700"
-          >
-            <img
-              src={user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'}
-              alt={user?.name || 'Citizen'}
-              className="w-8 h-8 rounded-lg object-cover border border-civic-500/40"
-            />
-            <div className="hidden md:block text-left">
-              <div className="text-xs font-bold text-white leading-none truncate max-w-[100px]">{user?.name || 'Citizen'}</div>
-              <div className="text-[10px] text-civic-400 capitalize font-medium mt-0.5">{user?.role?.replace('_', ' ') || 'Citizen'}</div>
+                </div>
+              </motion.div>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden md:block" />
-          </button>
-
-          {/* Profile Dropdown Menu */}
-          <AnimatePresence>
-            {showUserMenu && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute right-0 top-full mt-2 w-72 bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 p-3 z-50 backdrop-blur-xl"
-                >
-                  <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 mb-2">
-                    <div className="font-bold text-white text-sm">{user?.name}</div>
-                    <div className="text-[11px] text-slate-400 truncate">{user?.email}</div>
-                    <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-civic-950 text-civic-300 border border-civic-500/30 text-[10px] font-semibold">
-                      <ShieldCheck className="w-3 h-3 text-civic-400" />
-                      <span>{user?.roleTitle}</span>
-                    </div>
-                  </div>
-
-                  <div className="text-[11px] font-semibold text-slate-400 px-2 py-1 uppercase tracking-wider">
-                    Switch Demo Persona
-                  </div>
-
-                  <div className="space-y-1 my-1">
-                    {DEMO_ACCOUNTS.map(demo => (
-                      <button
-                        key={demo.id}
-                        onClick={() => {
-                          loginAsDemo(demo.id);
-                          setShowUserMenu(false);
-                        }}
-                        className={`w-full text-left p-2 rounded-xl text-xs flex items-center justify-between transition-all ${
-                          user?.id === demo.id ? 'bg-civic-600/30 text-white border border-civic-500/40' : 'text-slate-300 hover:bg-slate-800'
-                        }`}
-                      >
-                        <span className="font-medium">{demo.name}</span>
-                        <span className="text-[10px] text-slate-400 capitalize">{demo.role.replace('_', ' ')}</span>
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="border-t border-slate-800 pt-2 mt-2">
-                    <button
-                      onClick={() => {
-                        setShowUserMenu(false);
-                        logout();
-                        navigate('/login');
-                      }}
-                      className="w-full flex items-center gap-2 p-2 rounded-xl text-xs text-rose-400 hover:bg-rose-500/10 transition-colors font-semibold"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
+
 

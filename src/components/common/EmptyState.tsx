@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { Button } from './Button';
 import { LucideIcon } from 'lucide-react';
 
 interface EmptyStateProps {
@@ -26,38 +25,38 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-slate-900/80 rounded-3xl border border-dashed border-slate-800 backdrop-blur-xl ${className}`}>
-      <div className="w-16 h-16 rounded-2xl bg-civic-950 flex items-center justify-center text-civic-400 mb-4 shadow-glow border border-civic-500/40">
+    <div className={`flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-white rounded-3xl border border-dashed border-slate-300 shadow-subtle ${className}`}>
+      <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 mb-4 border border-slate-200 shadow-subtle">
         <Icon className="w-8 h-8 stroke-[1.75]" />
       </div>
       
-      <h3 className="text-lg font-bold text-white">{title}</h3>
-      <p className="text-sm text-slate-400 max-w-sm mt-1 mb-6 leading-relaxed">
+      <h3 className="text-lg font-black text-slate-950">{title}</h3>
+      <p className="text-sm text-slate-500 max-w-sm mt-1 mb-6 leading-relaxed font-medium">
         {description}
       </p>
 
       <div className="flex flex-wrap gap-3 items-center justify-center">
         {actionLabel && onAction && (
-          <Button
+          <button
             onClick={onAction}
-            leftIcon={actionIcon}
-            variant="civic-glow"
+            className="btn-black text-xs flex items-center gap-1.5"
           >
-            {actionLabel}
-          </Button>
+            {actionIcon}
+            <span>{actionLabel}</span>
+          </button>
         )}
 
         {secondaryActionLabel && onSecondaryAction && (
-          <Button
+          <button
             onClick={onSecondaryAction}
-            variant="outline"
-            className="border-slate-700 text-slate-300 hover:text-white"
+            className="btn-pill-outline text-xs"
           >
             {secondaryActionLabel}
-          </Button>
+          </button>
         )}
       </div>
     </div>
   );
 };
+
 
