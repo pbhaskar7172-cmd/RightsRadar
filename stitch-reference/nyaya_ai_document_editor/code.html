@@ -1,0 +1,145 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main > :first-child{margin-top:0!important;}main > :last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={theme:{extend:{"colors":{"inverse-primary":"#b6c8e4","primary-fixed":"#d4e3ff","background":"#fff8f3","secondary-container":"#e0e0db","error-container":"#ffdad6","on-surface":"#201b13","on-primary-fixed-variant":"#374860","on-background":"#201b13","inverse-on-surface":"#fbefe1","inverse-surface":"#362f26","on-surface-variant":"#44474d","on-tertiary-fixed-variant":"#713700","on-secondary-fixed":"#1a1c19","on-primary":"#ffffff","on-error-container":"#93000a","surface":"#fff8f3","primary":"#000919","secondary-fixed":"#e3e3de","surface-container":"#f8ecde","primary-fixed-dim":"#b6c8e4","on-primary-fixed":"#091c32","error":"#ba1a1a","surface-tint":"#4f5f78","on-secondary-fixed-variant":"#454744","on-error":"#ffffff","surface-container-high":"#f2e6d9","secondary-fixed-dim":"#c6c7c2","tertiary-container":"#371800","surface-dim":"#e4d8cb","on-secondary":"#ffffff","outline":"#74777d","surface-container-lowest":"#ffffff","on-tertiary-container":"#d06d0d","surface-variant":"#ece1d3","primary-container":"#0f2137","tertiary-fixed-dim":"#ffb783","on-secondary-container":"#62635f","on-tertiary-fixed":"#301400","secondary":"#5d5f5b","surface-container-low":"#fef2e4","surface-bright":"#fff8f3","on-tertiary":"#ffffff","tertiary":"#140500","outline-variant":"#c4c6cd","on-primary-container":"#7889a4","tertiary-fixed":"#ffdcc5","surface-container-highest":"#ece1d3"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"unit":"8px","stack-lg":"48px","container-max":"1200px","margin-mobile":"16px","margin-desktop":"40px","stack-md":"24px","gutter":"24px","stack-sm":"12px"},"fontFamily":{"caption":["Inter"],"label-md":["Inter"],"display-md":["Source Serif 4"],"display-lg":["Source Serif 4"],"body-lg":["Inter"],"body-md":["Inter"],"headline-lg-mobile":["Source Serif 4"],"title-lg":["Inter"],"headline-lg":["Source Serif 4"]},"fontSize":{"caption":["12px",{"lineHeight":"16px","fontWeight":"400"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"display-md":["36px",{"lineHeight":"44px","letterSpacing":"-0.01em","fontWeight":"700"}],"display-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"title-lg":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-lg":["30px",{"lineHeight":"38px","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,9,25,0.04)]"><div class="h-20 max-w-[1200px] mx-auto px-margin-desktop flex items-center justify-between"><div class="flex items-center gap-stack-lg"><span class="text-headline-lg font-headline-lg tracking-tight text-primary uppercase">Nyaya AI</span><nav class="hidden lg:flex items-center gap-gutter" data-active-classes="text-primary font-semibold"><a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" data-path="ai-assistant" href="#">AI Assistant</a><a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" data-path="my-cases" href="#">My Cases</a><a aria-current="page" class="transition-colors text-primary font-semibold" data-path="documents" href="#">Documents</a><a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" data-path="action-radar" href="#">ActionRadar</a><a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" data-path="about" href="#">About</a></nav></div><div class="flex items-center gap-stack-md"><button class="text-on-surface-variant hover:text-primary transition-colors flex items-center"><span class="material-symbols-outlined">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><button class="px-stack-md py-unit bg-primary text-on-primary text-label-md font-label-md rounded-lg hover:bg-primary-container transition-all">Get Started</button></div></div></header><main class="w-full pt-20 bg-background"><div class="flex flex-col w-full h-[calc(100vh-80px)]">
+<div class="flex-1 grid grid-cols-1 lg:grid-cols-12 max-w-[1600px] w-full mx-auto p-margin-mobile md:p-margin-desktop gap-gutter overflow-hidden">
+<!-- Left: Document Preview -->
+<div class="lg:col-span-8 flex flex-col bg-surface-container-lowest rounded-xl shadow-lg relative overflow-hidden transition-all duration-300">
+<!-- Document Header -->
+<div class="flex items-center justify-between p-stack-md bg-surface-container/50 border-b border-surface-variant/40">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">description</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Legal Notice Draft</h2>
+</div>
+<div class="flex items-center gap-unit">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors" title="Zoom Out">
+<span class="material-symbols-outlined text-[20px]">zoom_out</span>
+</button>
+<span class="font-label-md text-label-md text-on-surface-variant">100%</span>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors" title="Zoom In">
+<span class="material-symbols-outlined text-[20px]">zoom_in</span>
+</button>
+</div>
+</div>
+<!-- Document Content (Scrollable) -->
+<div class="flex-1 overflow-y-auto p-stack-lg bg-[#FDFCF8] relative">
+<!-- Page Wrapper -->
+<div class="max-w-[800px] mx-auto bg-white shadow-sm p-[48px] md:p-[96px] min-h-[1056px] relative text-[#2B2B2B]">
+<!-- Watermark -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+<span class="font-display-lg text-[120px] tracking-widest uppercase rotate-[-45deg] select-none text-primary">DRAFT</span>
+</div>
+<!-- Letterhead -->
+<div class="text-right mb-stack-lg border-b border-surface-variant pb-stack-md">
+<p class="font-label-md text-label-md text-on-surface-variant tracking-wider uppercase mb-1">Notice of Claim</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Date: October 24, 2023</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Ref: NY-AI-2023-894</p>
+</div>
+<!-- Addressee -->
+<div class="mb-stack-md font-body-md text-body-md leading-relaxed text-on-surface">
+<p><strong>To:</strong><br/>
+                        Global Tech Solutions Ltd.<br/>
+                        450 Innovation Drive, Suite 300<br/>
+                        San Francisco, CA 94105</p>
+</div>
+<!-- Subject -->
+<div class="mb-stack-md">
+<p class="font-label-md text-label-md uppercase tracking-wider text-primary border-l-2 border-primary pl-4">
+<strong>Subject: Formal Notice Regarding Breach of Contract and Demand for Refund</strong>
+</p>
+</div>
+<!-- Body -->
+<div class="space-y-6 font-body-md text-body-md leading-[1.8] text-on-surface">
+<p>Dear Sir/Madam,</p>
+<p>This formal notice is issued on behalf of our client, <strong>Apex Innovations Inc.</strong>, regarding the Software Development Agreement dated January 15, 2023.</p>
+<p>Despite numerous communications and grace periods extended, your organization has failed to deliver the promised milestones outlined in Schedule A of the Agreement. Specifically, the "Beta Release" scheduled for August 1, 2023, has yet to be provided in a functional state.</p>
+<div class="relative group">
+<!-- AI Highlight -->
+<div class="absolute -inset-2 bg-secondary-container/20 rounded-lg -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<span class="absolute -left-6 top-1 text-primary opacity-0 group-hover:opacity-100 transition-opacity material-symbols-outlined text-[16px]">psychology</span>
+<p class="relative">We hereby demand an immediate full refund of the initial deposit amounting to $150,000 USD within 14 business days of this notice.</p>
+</div>
+<p>Failure to comply with this demand will result in our client pursuing all available legal remedies, including but not limited to filing a civil suit for breach of contract, damages, and legal costs.</p>
+<p>We anticipate your prompt response.</p>
+</div>
+<!-- Signature -->
+<div class="mt-stack-lg pt-stack-lg">
+<p class="font-body-md text-body-md text-on-surface">Sincerely,</p>
+<div class="h-16 mt-4 w-48 border-b border-dashed border-surface-variant mb-2"></div>
+<p class="font-label-md text-label-md font-semibold text-on-surface">Legal Department</p>
+<p class="font-body-md text-caption text-on-surface-variant">Nyaya AI Automated Drafting</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: AI Editing & Actions -->
+<div class="lg:col-span-4 flex flex-col gap-stack-md overflow-y-auto">
+<!-- Context Card -->
+<div class="bg-surface-container rounded-xl p-stack-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/10 to-transparent blur-2xl rounded-full -mr-16 -mt-16 pointer-events-none"></div>
+<div class="flex items-start justify-between mb-stack-sm">
+<div>
+<p class="font-caption text-caption text-on-surface-variant uppercase tracking-wider mb-1">Document Type</p>
+<h3 class="font-title-lg text-title-lg text-on-surface">Formal Legal Notice</h3>
+</div>
+<div class="px-3 py-1 bg-primary/10 text-primary font-label-md text-caption rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_document</span>
+                        Draft Generated
+                    </div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">This document demands a refund due to a breach of contract based on the provided inputs.</p>
+</div>
+<!-- AI Suggestions -->
+<div class="bg-[#F5F5F0] rounded-xl p-stack-md border-l-4 border-primary shadow-md relative group">
+<div class="flex items-center gap-unit mb-stack-sm">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[16px]">psychology</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-semibold">Nyaya AI Suggestion</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-stack-md">The demand for the refund is clear, but should we emphasize the deadline (November 7, 2023) more strongly and specify the payment method?</p>
+<div class="flex gap-unit">
+<button class="flex-1 py-2 px-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">auto_fix_high</span>
+                        Apply Revision
+                    </button>
+<button class="py-2 px-4 bg-transparent border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-variant transition-colors">
+                        Dismiss
+                    </button>
+</div>
+</div>
+<!-- Manual Prompt Input -->
+<div class="bg-surface-container rounded-xl p-stack-md shadow-sm">
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="ai-prompt">Ask AI to Revise</label>
+<div class="relative">
+<textarea class="w-full bg-[#FDFCF8] border border-[#e0e0db] rounded-lg p-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all resize-none placeholder-on-surface-variant/50" id="ai-prompt" placeholder="E.g., Make the tone more aggressive, or add a section about confidentiality..." rows="3"></textarea>
+<button class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">send</span>
+</button>
+</div>
+</div>
+<div class="flex-1"></div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-unit">
+<button class="w-full py-4 px-6 bg-surface-container-high text-on-surface font-label-md text-label-md rounded-xl hover:bg-surface-variant transition-colors flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">picture_as_pdf</span>
+                        Download PDF
+                    </div>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">arrow_forward</span>
+</button>
+<button class="w-full py-4 px-6 bg-primary text-on-primary font-label-md text-label-md rounded-xl hover:bg-primary-container transition-colors flex items-center justify-between shadow-md relative overflow-hidden group">
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+<div class="flex items-center gap-3 relative z-10">
+<span class="material-symbols-outlined">send</span>
+                        Submit to Authority
+                    </div>
+<span class="material-symbols-outlined text-[20px] relative z-10">arrow_forward</span>
+</button>
+</div>
+<!-- Trust Footer -->
+<div class="mt-4 flex items-center gap-2 justify-center text-center px-4">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">info</span>
+<p class="font-caption text-caption text-on-surface-variant">AI-assisted information. Always verify before taking action.</p>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-low py-stack-lg border-t border-outline-variant/30"><div class="max-w-[1200px] mx-auto px-margin-desktop flex flex-col md:flex-row items-center justify-between gap-stack-md"><div class="text-on-surface-variant font-label-md text-caption">© 2024 Nyaya AI. Judicial Excellence.</div><nav class="flex gap-gutter items-center"><a class="text-caption text-on-surface-variant hover:text-primary transition-colors" data-path="privacy" href="#">Privacy</a><a class="text-caption text-on-surface-variant hover:text-primary transition-colors" data-path="terms" href="#">Terms</a><a class="text-caption text-on-surface-variant hover:text-primary transition-colors" data-path="sources" href="#">Sources</a><a class="text-caption text-on-surface-variant hover:text-primary transition-colors" data-path="contact" href="#">Contact</a></nav></div></footer></body></html>
