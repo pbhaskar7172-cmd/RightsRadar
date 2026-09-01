@@ -901,121 +901,30 @@ Citizens begin by describing their problem in natural language.
 
 ![Start a Case](https://github.com/pbhaskar7172-cmd/RightsRadar/blob/front1/Screenshot%202026-09-01%20183735.png?raw=true)
 
-
-
----
-
-## 02 — AI Understanding
-
-RightsRadar identifies the likely domain and extracts relevant information.
-
-### Screenshot
-
-> **[ INSERT AI UNDERSTANDING SCREENSHOT HERE ]**
-
-Recommended image:
-
-```text
-docs/screenshots/ai-understanding.png
-```
-
----
-
-## 03 — Smart Questions
-
-The system asks context-specific questions required to complete the case.
-
-### Screenshot
-
-> **[ INSERT SMART QUESTIONS SCREENSHOT HERE ]**
-
-Recommended image:
-
-```text
-docs/screenshots/smart-questions.png
-```
-
----
-
-## 04 — ActionRadar
-
-The citizen receives a clear next-best-action recommendation.
-
-### Screenshot
-
-> **[ INSERT ACTIONRADAR SCREENSHOT HERE ]**
-
-Recommended image:
-
-```text
-docs/screenshots/action-radar.png
-```
-
----
-
 ## 05 — Document Generation
 
 The case information is transformed into a structured document for user review.
 
-### Screenshot
-
-> **[ INSERT DOCUMENT SCREENSHOT HERE ]**
-
-Recommended image:
-
-```text
-docs/screenshots/document.png
-```
-
----
+![Document Generation](https://github.com/pbhaskar7172-cmd/RightsRadar/blob/front1/Screenshot%202026-09-01%20190049.png)
 
 ## 06 — Case Dashboard
 
 The user can monitor active cases and their current status.
 
-### Screenshot
+![DashBoard](https://github.com/pbhaskar7172-cmd/RightsRadar/blob/front1/Screenshot%202026-09-01%20190111.png)
 
-> **[ INSERT DASHBOARD SCREENSHOT HERE ]**
-
-Recommended image:
-
-```text
-docs/screenshots/dashboard.png
-```
-
----
 
 ## 07 — Case Timeline
 
 Important case events are displayed chronologically.
 
-### Screenshot
-
-> **[ INSERT TIMELINE SCREENSHOT HERE ]**
-
-Recommended image:
-
-```text
-docs/screenshots/timeline.png
-```
-
----
+![CaseTimeline](https://github.com/pbhaskar7172-cmd/RightsRadar/blob/front1/Screenshot%202026-09-01%20190129.png)
 
 ## 08 — Evidence Management
 
 Users can review and manage evidence associated with a case.
 
-### Screenshot
-
-> **[ INSERT EVIDENCE SCREENSHOT HERE ]**
-
-Recommended image:
-
-```text
-docs/screenshots/evidence.png
-```
-
----
+![Evidence](https://github.com/pbhaskar7172-cmd/RightsRadar/blob/front1/Screenshot%202026-09-01%20190145.png)
 
 # Example Case Journey
 
