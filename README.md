@@ -899,7 +899,7 @@ Citizens begin by describing their problem in natural language.
 01 — Start a Case
 Citizens begin by describing their problem in natural language.
 
-![image alt] (https://github.com/pbhaskar7172-cmd/RightsRadar/blob/964d0fa834627e6ed7c80f78a4dd35120852237f/Screenshot%202026-09-01%20183735.png)
+![Start a Case](https://github.com/pbhaskar7172-cmd/RightsRadar/blob/front1/Screenshot%202026-09-01%20183735.png?raw=true)
 
 
 
