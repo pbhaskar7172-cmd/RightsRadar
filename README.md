@@ -1,354 +1,1534 @@
-# RightsTrack
+# RightsRadar
 
-[![CI Build & Sanity Check](https://github.com/sameerONgit-debug/rightstrack/actions/workflows/ci.yml/badge.svg)](https://github.com/sameerONgit-debug/rightstrack/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Framework](https://img.shields.io/badge/Framework-Next.js%2014%20(App%20Router)-black)](https://nextjs.org/)
-[![Database](https://img.shields.io/badge/Database-Supabase%20pgvector-emerald)](https://supabase.com/)
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://vercel.com/)
+### AI-Powered Civic, Legal & Cyber Rights Case Manager
 
-> **Describe your problem once — get the right legal document, and never miss a deadline again.**
+> **Describe your problem once. Understand what applies, take the right action, prepare the required document, track your case, and know what to do next.**
 
----
+RightsRadar is an AI-powered civic and legal assistance platform designed to help citizens navigate rights-related problems as **persistent cases rather than one-time questions**.
 
-## 1. Problem
-
-Over 6 million Right to Information (RTI) applications and 500,000 consumer complaints are drafted in India each year. Despite strong statutory protections under the RTI Act (2005) and Consumer Protection Act (2019), more than 40% of citizens abandon their claims when public authorities or corporations fail to respond in time. 
-
-Current civic-tech and legal-AI solutions operate solely as static document generators: they produce an initial form or letter and terminate their engagement. The citizen is left unassisted when statutory deadlines pass, unaware of legal concepts such as *deemed refusal*, and unable to navigate the procedural complexities of drafting First Appeals or regulatory escalations.
+Instead of stopping at an AI-generated answer or document, RightsRadar connects **case understanding, evidence, grounded knowledge, document generation, deadlines, tracking, escalation, and next-best-action recommendations** into a single workflow.
 
 ---
 
-## 2. Solution
+## Product Vision
 
-RightsTrack is an end-to-end civic case tracker that bridges the gap between document creation and statutory enforcement:
+Most legal and civic assistance tools follow:
 
-```
-Conversational Intake ──> AI Domain Classification ──> Citation-Grounded Drafting
-                                                                │
-  Auto-Escalated First Appeal <── Rule-Based Deadline Engine <──┘
+```text
+Question → Answer
 ```
 
-1. **Conversational Intake**: Citizens express their problem narrative in plain text without needing prior legal knowledge.
-2. **Domain Classification**: Automatic categorization into the relevant legal regime (RTI vs. Consumer Protection) with explicit user confirmation.
-3. **Citation-Grounded Drafting**: Generates formal, procedural legal documents containing verified statutory citations.
-4. **Case & Deadline Tracker**: Automatically calculates and tracks mandatory statutory response windows (e.g., 30 calendar days for RTI PIO responses) using deterministic date arithmetic.
-5. **Automated Escalation**: When a public authority fails to respond within the legal timeframe, RightsTrack identifies the statutory breach (*deemed refusal*) and automatically pre-drafts a formal First Appeal.
+or:
+
+```text
+Problem → Document
+```
+
+RightsRadar is designed around a complete case lifecycle:
+
+```text
+┌────────────┐
+│ UNDERSTAND │
+└─────┬──────┘
+      ↓
+┌────────────┐
+│    ACT     │
+└─────┬──────┘
+      ↓
+┌────────────┐
+│  DOCUMENT  │
+└─────┬──────┘
+      ↓
+┌────────────┐
+│   TRACK    │
+└─────┬──────┘
+      ↓
+┌────────────┐
+│ ESCALATE   │
+└─────┬──────┘
+      ↓
+┌────────────┐
+│  RESOLVE   │
+└────────────┘
+```
+
+The central question RightsRadar attempts to answer throughout this lifecycle is:
+
+> **"What should I do next?"**
 
 ---
 
-## 3. Features
+# Why RightsRadar?
 
-- **Free-Text Problem Intake**: Conversational entry point accepting unstructured user narratives.
-- **Domain Classification with User Confirmation**: AI-assisted statutory categorization with human-in-the-loop review.
-- **RAG-Grounded Generation with Visible Citations**: In-line statutory badges linking directly to verified legal sections.
-- **Anti-Hallucination Citation Verification**: Deterministic post-generation validation ensuring only retrieved legal authorities are cited.
-- **Rule-Based Legal Deadline Engine**: 100% deterministic calculation of statutory reply windows (no LLM date math).
-- **Automated Escalation Drafting**: Pre-drafted First Appeals and notices generated immediately upon statutory deadline breach.
-- **Deployed Live Demo**: Single Next.js deployment hosted on Vercel backed by Supabase Postgres and pgvector.
+Citizens often know that something is wrong but do not know how to convert that problem into an actionable case.
+
+A typical situation may involve:
+
+- identifying the applicable domain,
+- understanding the relevant procedure,
+- determining the responsible authority,
+- collecting appropriate evidence,
+- preparing the correct document,
+- knowing where and when to submit it,
+- tracking the response,
+- calculating deadlines,
+- and determining when escalation becomes appropriate.
+
+RightsRadar brings these steps together into a persistent case-management workflow.
 
 ---
 
-## 4. Architecture
+# Core Differentiator — ActionRadar
 
-```mermaid
-flowchart TD
-    subgraph Client ["Frontend (Next.js App Router)"]
-        UI_Intake["Intake Wizard (/intake)"]
-        UI_Doc["Document & Citation Viewer (/document/[caseId])"]
-        UI_Dash["Case Tracker Dashboard (/dashboard)"]
-        UI_Esc["Escalation Appeal Center (/escalate/[caseId])"]
-    end
+## **What should I do next?**
 
-    subgraph API ["Next.js Route Handlers (/app/api)"]
-        API_Analyze["/api/analyze"]
-        API_Cases["/api/cases"]
-        API_CaseById["/api/cases/[caseId]"]
-        API_Escalate["/api/cases/[caseId]/escalate"]
-        API_Sources["/api/sources/[documentId]"]
-    end
+ActionRadar is the decision-support layer of RightsRadar.
 
-    subgraph Services ["Core Modular Services (/lib)"]
-        AIService["AI Classification & Extraction Service (/lib/ai)"]
-        RAGService["RAG Retrieval & Reranker Service (/lib/rag)"]
-        Validator["Deterministic Citation Validator (/lib/rag/validator.js)"]
-        DocService["Legal Document Drafters (/lib/documents)"]
-        CaseService["Case State Machine & Deadline Engine (/lib/cases)"]
-    end
+Instead of simply displaying case information, it evaluates the current case state and surfaces the most relevant next action.
 
-    subgraph External ["External Infrastructure & Models"]
-        Claude["Anthropic Claude 3.5 Sonnet"]
-        Voyage["Voyage AI (voyage-law-2)"]
-        SupabaseDB["Supabase Postgres (Cases & Documents)"]
-        SupabaseVec["Supabase pgvector (Statutory Embeddings)"]
-    end
+Example states:
 
-    Client --> API
-    API_Analyze --> AIService
-    API_Cases --> DocService
-    API_Cases --> CaseService
-    API_Escalate --> DocService
-    API_Sources --> RAGService
+```text
+🟢 ON TRACK
+Case is progressing normally.
 
-    AIService --> Claude
-    DocService --> Claude
-    DocService --> Validator
-    RAGService --> Voyage
-    RAGService --> SupabaseVec
-    CaseService --> SupabaseDB
+🟡 ACTION REQUIRED
+The citizen needs to perform the next step.
+
+🔴 DEADLINE PASSED
+A relevant response or action window has expired.
+
+⚡ TAKE ACTION
+A specific next step is recommended.
+```
+
+The objective is to turn complex procedural workflows into a simple, actionable interface.
+
+---
+
+# Product Workflow
+
+```text
+                    CITIZEN PROBLEM
+                          │
+                          ▼
+                ┌───────────────────┐
+                │ Intelligent Intake│
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Domain Detection  │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Case Intelligence │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Smart Questions   │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Evidence Analysis │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Grounded Retrieval│
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Reasoning Engine  │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │   ActionRadar     │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Document Engine   │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Case Tracking     │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Deadline Engine   │
+                └─────────┬─────────┘
+                          ▼
+                ┌───────────────────┐
+                │ Escalation Logic  │
+                └─────────┬─────────┘
+                          ▼
+                       RESOLVE
 ```
 
 ---
 
-## 5. Tech Stack
+# Supported Domains
 
-| Layer | Technology | Selection Rationale |
-|---|---|---|
-| **Fullstack Framework** | Next.js 14 (App Router, JavaScript) | Single-deployment architecture; server components and API routes in one codebase. |
-| **Styling & Design** | Tailwind CSS | Utility-first styling with custom legal and civic color tokens. |
-| **Database** | Supabase Postgres | Managed relational database with built-in connection pooling and row-level security. |
-| **Vector Store** | Supabase pgvector | Co-located relational and vector store inside the same Postgres instance. |
-| **LLM Inference** | Anthropic Claude 3.5 Sonnet | High-accuracy instruction-following for structured legal drafting and entity extraction. |
-| **Embeddings** | Voyage AI (`voyage-law-2`) | Specialized domain-trained legal embedding model for statutory retrieval. |
-| **Authentication** | Supabase Auth | Session-based anonymous and authenticated user state. |
-| **Deployment & CI** | Vercel & GitHub Actions | Zero-config continuous deployment with automated build and lint checks. |
+RightsRadar is designed around multiple civic, legal, and cyber-rights domains.
 
----
+| Domain                             | Example Use Cases                                                |
+| ---------------------------------- | ---------------------------------------------------------------- |
+| **RTI / Right to Information**     | Information requests, delayed responses, first appeals           |
+| **Consumer Rights**                | Defective products, refunds, service disputes, complaints        |
+| **Tenant Rights**                  | Deposit disputes, tenancy conflicts, rental issues               |
+| **Workplace Rights**               | Workplace grievances, salary-related disputes, employment issues |
+| **Government Schemes**             | Scheme discovery, eligibility, application assistance            |
+| **Cyber Fraud / Cyber Complaints** | Online fraud, phishing, payment fraud, cyber incidents           |
 
-## 6. Screenshots
-
-### Conversational Intake & Domain Classification
-![RightsTrack Intake Screen](/docs/screenshots/intake_screen_placeholder.png)
-*Figure 1: Citizen enters problem narrative in natural language and receives AI domain classification.*
-
-### Citation-Grounded Legal Document Drafting
-![Citation Inspector View](/docs/screenshots/citation_view_placeholder.png)
-*Figure 2: Grounded legal draft displaying interactive, verified statutory citation badges.*
-
-### Real-Time Case Dashboard & Statutory Countdown
-![Case Tracker Dashboard](/docs/screenshots/dashboard_placeholder.png)
-*Figure 3: Active case monitoring with deterministic statutory countdown timers.*
-
-### Automated Deemed Refusal Escalation Draft
-![Escalation Appeal View](/docs/screenshots/escalation_draft_placeholder.png)
-*Figure 4: Automated First Appeal generation triggered immediately upon deadline breach.*
+The architecture uses domain-specific knowledge, rules, questions, evidence requirements, authorities, templates, deadlines, and escalation workflows.
 
 ---
 
-## 7. Installation
+# Key Features
+
+### Intelligent Problem Intake
+
+Citizens can describe their problem using natural language without requiring legal terminology.
+
+### AI-Powered Domain Classification
+
+The system identifies the likely rights domain and allows the user to confirm the classification.
+
+### Structured Case Intelligence
+
+Unstructured narratives are transformed into structured case information that can be used throughout the case lifecycle.
+
+### Adaptive Smart Questions
+
+Instead of forcing users through a fixed questionnaire, RightsRadar identifies missing information and asks context-dependent questions.
+
+### Evidence Intelligence
+
+Documents, images, screenshots, receipts, communications, and other evidence can be analyzed and associated with the case.
+
+### Grounded AI
+
+Relevant source material is retrieved before generating important recommendations or documents.
+
+### Citation & Claim Traceability
+
+Important generated claims can be connected to supporting source material and case evidence.
+
+### AI Hallucination Firewall
+
+Generated citations and claims can be validated against retrieved source material before being surfaced to the user.
+
+### Explainable Recommendations
+
+The system is designed to explain **why** an action is recommended rather than presenting an unexplained answer.
+
+### Document Intelligence
+
+Case information, evidence, and retrieved sources can be used to generate structured legal and civic documents.
+
+### Deterministic Deadline Engine
+
+Critical deadline calculations are handled through explicit procedural rules rather than relying on an LLM for date arithmetic.
+
+### Case Timeline
+
+Every important case event can be represented chronologically.
+
+### Risk & Escalation
+
+The system evaluates case state, deadlines, missing information, and procedural triggers to identify when further action may be required.
+
+### Persistent Case Management
+
+The interaction does not end when a document is generated. The case remains trackable until resolution.
+
+---
+
+# AI/ML Architecture
+
+The AI/ML layer is the intelligence core of RightsRadar.
+
+It is designed as a multi-stage pipeline rather than a single LLM call.
+
+```text
+                     USER INPUT
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │ Problem Understanding│
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Domain Classification│
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Case Representation │
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Smart Question Engine│
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Evidence Intelligence│
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Retrieval / RAG      │
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Grounding & Validation│
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Reasoning Engine     │
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Risk / Decision      │
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Document Intelligence│
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ Case State Update    │
+              └──────────┬──────────┘
+                         ▼
+              ┌─────────────────────┐
+              │     ActionRadar      │
+              └─────────────────────┘
+```
+
+---
+
+# 1. Case Intelligence Engine
+
+The Case Intelligence Engine converts an unstructured citizen narrative into a structured representation.
+
+### Example Input
+
+```text
+"I bought a laptop online for ₹45,000.
+It arrived damaged and the seller refuses
+to provide a refund."
+```
+
+### Structured Case
+
+```json
+{
+  "domain": "consumer",
+  "issue": "defective_product",
+  "amount": 45000,
+  "party": "seller",
+  "event": "product_received_damaged",
+  "prior_action": "seller_contacted",
+  "desired_remedy": "refund"
+}
+```
+
+This structured representation can subsequently drive:
+
+- question generation,
+- evidence requirements,
+- source retrieval,
+- document generation,
+- risk assessment,
+- deadline calculations,
+- and next-action recommendations.
+
+---
+
+# 2. Adaptive Smart Question Engine
+
+A fixed questionnaire asks every user the same questions.
+
+RightsRadar instead aims to determine:
+
+```text
+Known Information
+        +
+Missing Information
+        +
+Domain Requirements
+        +
+Evidence Requirements
+        +
+Current Case State
+        ↓
+Next Required Question
+```
+
+Example:
+
+```text
+Known
+✓ Seller
+✓ Purchase date
+✓ Order number
+
+Missing
+✗ Invoice
+✗ Payment proof
+✗ Defect description
+✗ Previous response
+
+            ↓
+
+Ask only what is required.
+```
+
+This reduces unnecessary user interaction while improving case completeness.
+
+---
+
+# 3. Evidence Intelligence
+
+Evidence is treated as structured information rather than simply an uploaded file.
+
+Potential evidence includes:
+
+- PDFs,
+- invoices,
+- receipts,
+- screenshots,
+- emails,
+- letters,
+- notices,
+- transaction records,
+- photographs,
+- chat conversations,
+- and other supporting documents.
+
+The intended processing flow is:
+
+```text
+Evidence
+   ↓
+Document / Image Understanding
+   ↓
+Information Extraction
+   ↓
+Entity & Event Detection
+   ↓
+Evidence Classification
+   ↓
+Relevance Analysis
+   ↓
+Claim Association
+   ↓
+Case Evidence Graph
+```
+
+---
+
+# 4. Evidence Graph
+
+RightsRadar models relationships between different parts of a case.
+
+```text
+                         CASE
+                           │
+             ┌─────────────┼─────────────┐
+             │             │             │
+             ▼             ▼             ▼
+          CLAIMS        EVENTS        EVIDENCE
+             │             │             │
+             │             │             │
+             └─────────────┼─────────────┘
+                           │
+                           ▼
+                        SOURCES
+```
+
+For example:
+
+```text
+Claim
+"Seller was notified about the defect."
+
+            ▲
+            │ supported by
+            │
+Evidence
+Customer support email
+
+            ▲
+            │ records
+            │
+Event
+Complaint submitted
+```
+
+This allows the system to reason about whether important claims have supporting evidence.
+
+---
+
+# 5. Retrieval-Augmented Generation
+
+RightsRadar uses a retrieval-first approach for domain knowledge.
+
+```text
+Case Context
+     ↓
+Query Construction
+     ↓
+Semantic Retrieval
+     ↓
+Relevant Source Chunks
+     ↓
+Reranking / Filtering
+     ↓
+Grounded Context
+     ↓
+LLM Reasoning
+     ↓
+Generated Output
+```
+
+The knowledge layer can contain domain-specific:
+
+- legislation,
+- regulations,
+- official policies,
+- government documentation,
+- procedural rules,
+- scheme information,
+- and authoritative guidance.
+
+---
+
+# 6. Source & Claim Traceability
+
+A core design principle is:
+
+> **Important AI-generated claims should be traceable to their supporting sources.**
+
+Conceptually:
+
+```text
+Generated Claim
+      │
+      ▼
+Supporting Source
+      │
+      ▼
+Source Document
+      │
+      ▼
+Relevant Section / Passage
+```
+
+This provides the foundation for transparent AI-assisted civic guidance.
+
+---
+
+# 7. AI Hallucination Firewall
+
+Legal and civic applications require stronger safeguards than ordinary conversational AI.
+
+RightsRadar therefore separates:
+
+```text
+Generation
+    ↓
+Validation
+    ↓
+User-facing Output
+```
+
+A generated citation can be checked against the retrieved source set.
+
+```text
+AI Generated Citation
+        ↓
+Citation Extraction
+        ↓
+Source Verification
+        ↓
+┌───────────────────┐
+│ Verified          │
+│                   │
+│ → Allow           │
+└───────────────────┘
+
+OR
+
+┌───────────────────┐
+│ Unverified        │
+│                   │
+│ → Flag / Reject   │
+└───────────────────┘
+```
+
+The objective is to reduce:
+
+- fabricated citations,
+- unsupported legal claims,
+- incorrect procedural statements,
+- and ungrounded recommendations.
+
+---
+
+# 8. Confidence & Explainability
+
+RightsRadar is designed around explainable decision support.
+
+Instead of:
+
+```text
+"Do this."
+```
+
+the system should be able to communicate:
+
+```text
+Recommended Action
+        ↓
+Why this action?
+        ↓
+Relevant Case Facts
+        ↓
+Supporting Evidence
+        ↓
+Relevant Sources
+        ↓
+Confidence
+```
+
+This makes AI assistance easier to inspect and challenge.
+
+---
+
+# 9. Case Digital Twin
+
+The **Case Digital Twin** represents the current state of a user's case in structured form.
+
+```text
+CASE
+│
+├── Domain
+├── Problem
+├── Parties
+├── Authority
+├── Claims
+├── Evidence
+├── Documents
+├── Events
+├── Sources
+├── Deadlines
+├── Current State
+├── Risk
+└── Next Best Action
+```
+
+As the user provides additional information or records new events, the case representation can evolve.
+
+This allows the AI layer to reason about the **case as a continuously changing state**, rather than treating every interaction as an isolated conversation.
+
+---
+
+# 10. Risk & Next-Best-Action Engine
+
+The decision layer considers signals such as:
+
+```text
+Case State
++
+Deadline Status
++
+Missing Information
++
+Evidence State
++
+Procedural Trigger
++
+Authority Response
++
+Previous User Actions
+```
+
+These signals can be used to determine:
+
+```text
+Current State
+      ↓
+Risk / Urgency
+      ↓
+Candidate Actions
+      ↓
+Rule Validation
+      ↓
+Source Validation
+      ↓
+Next Best Action
+      ↓
+ActionRadar
+```
+
+---
+
+# 11. Deterministic Deadline Engine
+
+Critical procedural dates should not depend on an LLM.
+
+The deadline engine uses explicit rules:
+
+```text
+Filing / Event Date
+        +
+Applicable Rule
+        +
+Configured Time Period
+        ↓
+Calculated Deadline
+        ↓
+Current Date
+        ↓
+Deadline State
+```
+
+Possible states include:
+
+```text
+UPCOMING
+   ↓
+DUE SOON
+   ↓
+DUE
+   ↓
+OVERDUE
+   ↓
+ESCALATION ELIGIBLE
+```
+
+The AI layer can explain the result, while the underlying date calculation remains deterministic.
+
+---
+
+# 12. Document Intelligence
+
+Documents are generated from the structured case rather than from an isolated prompt.
+
+```text
+Structured Case
+      +
+Claims
+      +
+Evidence
+      +
+Retrieved Sources
+      +
+Procedural Context
+      ↓
+Document Generation
+      ↓
+Validation
+      ↓
+User Review
+      ↓
+Export / Filing
+```
+
+Potential document types include:
+
+- RTI applications,
+- complaints,
+- notices,
+- appeals,
+- grievances,
+- follow-up communications,
+- cyber incident reports,
+- and domain-specific forms.
+
+---
+
+# Domain Pack Architecture
+
+RightsRadar is designed to support domain-specific intelligence through reusable **Domain Packs**.
+
+Each domain pack can contain:
+
+```text
+DOMAIN PACK
+│
+├── Knowledge Sources
+├── Domain Rules
+├── Required Information
+├── Smart Questions
+├── Evidence Requirements
+├── Authorities
+├── Document Templates
+├── Deadline Rules
+└── Escalation Rules
+```
+
+This allows new domains to reuse the same core infrastructure.
+
+```text
+                    CORE ENGINE
+                        │
+       ┌────────────────┼────────────────┐
+       │                │                │
+       ▼                ▼                ▼
+      RTI           CONSUMER          CYBER
+       │                │                │
+       └────────────────┼────────────────┘
+                        │
+                        ▼
+                 ActionRadar
+```
+
+---
+
+# System Architecture
+
+```text
+                         ┌─────────────────┐
+                         │     CITIZEN     │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                    ┌─────────────────────────┐
+                    │      WEB APPLICATION    │
+                    │   React / TypeScript    │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │      APPLICATION API    │
+                    └────────────┬────────────┘
+                                 │
+              ┌──────────────────┼──────────────────┐
+              │                  │                  │
+              ▼                  ▼                  ▼
+      ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+      │ Case         │   │ Evidence     │   │ Document     │
+      │ Intelligence │   │ Intelligence │   │ Intelligence │
+      └──────┬───────┘   └──────┬───────┘   └──────┬───────┘
+             │                  │                  │
+             └──────────────────┼──────────────────┘
+                                ▼
+                     ┌────────────────────┐
+                     │    DOMAIN ENGINE   │
+                     └──────────┬─────────┘
+                                │
+              ┌─────────────────┼─────────────────┐
+              ▼                 ▼                 ▼
+        ┌──────────┐      ┌──────────┐      ┌──────────┐
+        │   RAG    │      │  RULES   │      │ DEADLINE │
+        │  ENGINE  │      │  ENGINE  │      │  ENGINE  │
+        └────┬─────┘      └────┬─────┘      └────┬─────┘
+             │                 │                 │
+             └─────────────────┼─────────────────┘
+                               ▼
+                    ┌─────────────────────┐
+                    │   CASE STATE ENGINE │
+                    └──────────┬──────────┘
+                               ▼
+                    ┌─────────────────────┐
+                    │     ACTIONRADAR     │
+                    │   NEXT BEST ACTION  │
+                    └─────────────────────┘
+```
+
+---
+
+# Data Model
+
+The case-centric data model is organized around:
+
+```text
+USER
+ │
+ └── CASE
+      │
+      ├── CLAIMS
+      ├── EVIDENCE
+      ├── DOCUMENTS
+      ├── EVENTS
+      ├── DEADLINES
+      ├── ACTIONS
+      └── SOURCES
+```
+
+### Case
+
+Stores the core state of a citizen's problem.
+
+### Claims
+
+Represents important assertions made within the case.
+
+### Evidence
+
+Stores supporting material associated with the case.
+
+### Documents
+
+Stores generated or reviewed documents.
+
+### Events
+
+Maintains chronological case history.
+
+### Deadlines
+
+Stores important procedural dates and their states.
+
+### Actions
+
+Represents completed, pending, and recommended actions.
+
+### Sources
+
+Stores references used to ground AI-generated information.
+
+---
+
+# Product Walkthrough
+
+## 01 — Start a Case
+
+Citizens begin by describing their problem in natural language.
+
+### Screenshot
+
+> **[ INSERT START CASE SCREENSHOT HERE ]**
+
+Recommended image:
+
+```text
+docs/screenshots/start-case.png
+```
+
+---
+
+## 02 — AI Understanding
+
+RightsRadar identifies the likely domain and extracts relevant information.
+
+### Screenshot
+
+> **[ INSERT AI UNDERSTANDING SCREENSHOT HERE ]**
+
+Recommended image:
+
+```text
+docs/screenshots/ai-understanding.png
+```
+
+---
+
+## 03 — Smart Questions
+
+The system asks context-specific questions required to complete the case.
+
+### Screenshot
+
+> **[ INSERT SMART QUESTIONS SCREENSHOT HERE ]**
+
+Recommended image:
+
+```text
+docs/screenshots/smart-questions.png
+```
+
+---
+
+## 04 — ActionRadar
+
+The citizen receives a clear next-best-action recommendation.
+
+### Screenshot
+
+> **[ INSERT ACTIONRADAR SCREENSHOT HERE ]**
+
+Recommended image:
+
+```text
+docs/screenshots/action-radar.png
+```
+
+---
+
+## 05 — Document Generation
+
+The case information is transformed into a structured document for user review.
+
+### Screenshot
+
+> **[ INSERT DOCUMENT SCREENSHOT HERE ]**
+
+Recommended image:
+
+```text
+docs/screenshots/document.png
+```
+
+---
+
+## 06 — Case Dashboard
+
+The user can monitor active cases and their current status.
+
+### Screenshot
+
+> **[ INSERT DASHBOARD SCREENSHOT HERE ]**
+
+Recommended image:
+
+```text
+docs/screenshots/dashboard.png
+```
+
+---
+
+## 07 — Case Timeline
+
+Important case events are displayed chronologically.
+
+### Screenshot
+
+> **[ INSERT TIMELINE SCREENSHOT HERE ]**
+
+Recommended image:
+
+```text
+docs/screenshots/timeline.png
+```
+
+---
+
+## 08 — Evidence Management
+
+Users can review and manage evidence associated with a case.
+
+### Screenshot
+
+> **[ INSERT EVIDENCE SCREENSHOT HERE ]**
+
+Recommended image:
+
+```text
+docs/screenshots/evidence.png
+```
+
+---
+
+# Example Case Journey
+
+## Consumer Rights
+
+### Problem
+
+> "I bought a phone online. It arrived defective and the seller is refusing to refund me."
+
+### RightsRadar Workflow
+
+```text
+Natural Language Problem
+          ↓
+Consumer Domain Detected
+          ↓
+Relevant Information Extracted
+          ↓
+Missing Information Identified
+          ↓
+Smart Questions
+          ↓
+Evidence Collected
+          ↓
+Relevant Sources Retrieved
+          ↓
+Recommended Action
+          ↓
+Complaint / Notice Generated
+          ↓
+User Reviews Document
+          ↓
+Case Marked as Filed
+          ↓
+Case Tracking
+          ↓
+Deadline Monitoring
+          ↓
+ActionRadar
+          ↓
+Follow-up / Escalation
+```
+
+---
+
+# Example Cyber Fraud Journey
+
+For cyber incidents, RightsRadar is designed around a safety-first workflow.
+
+```text
+Cyber Incident
+      ↓
+Incident Classification
+      ↓
+Immediate Safety Guidance
+      ↓
+Evidence Preservation
+      ↓
+Incident Information
+      ↓
+Structured Case
+      ↓
+Official Reporting Guidance
+      ↓
+Case Tracking
+      ↓
+Follow-up
+```
+
+RightsRadar should not claim that a complaint has been filed unless an actual external filing integration has completed the operation.
+
+---
+
+# Technology Stack
+
+## Frontend
+
+| Technology        | Purpose                       |
+| ----------------- | ----------------------------- |
+| **React**         | User interface                |
+| **TypeScript**    | Type-safe development         |
+| **Vite**          | Development and build tooling |
+| **React Router**  | Client-side routing           |
+| **Tailwind CSS**  | Styling                       |
+| **Framer Motion** | UI animation                  |
+| **Lucide React**  | Icon system                   |
+
+## AI / ML
+
+| Component                 | Purpose                                                           |
+| ------------------------- | ----------------------------------------------------------------- |
+| **LLM**                   | Natural-language understanding, reasoning and document generation |
+| **Embeddings**            | Semantic representation of domain knowledge                       |
+| **RAG**                   | Retrieval of relevant source material                             |
+| **Reranking**             | Improving relevance of retrieved content                          |
+| **Structured Extraction** | Converting narratives into case data                              |
+| **Citation Validation**   | Verifying generated references                                    |
+| **Rule Engine**           | Deterministic procedural logic                                    |
+| **Deadline Engine**       | Deterministic date calculation                                    |
+
+## Data & Infrastructure
+
+The production architecture is designed to support:
+
+- relational case data,
+- vector search,
+- document/object storage,
+- authentication,
+- AI inference,
+- source ingestion,
+- and background processing.
+
+---
+
+# Repository Structure
+
+The frontend application is organized around pages, reusable components, shared state, and domain data.
+
+```text
+RightsRadar/
+│
+├── public/
+│
+├── src/
+│   │
+│   ├── components/
+│   │   ├── cards/
+│   │   ├── common/
+│   │   ├── layout/
+│   │   ├── radar/
+│   │   └── timeline/
+│   │
+│   ├── context/
+│   │   ├── AuthContext.tsx
+│   │   └── CivicDataContext.tsx
+│   │
+│   ├── data/
+│   │   ├── issueTypes.ts
+│   │   ├── mockCases.ts
+│   │   ├── mockFaqs.ts
+│   │   ├── mockNotifications.ts
+│   │   ├── mockSources.ts
+│   │   └── mockTemplates.ts
+│   │
+│   ├── pages/
+│   │   ├── LoginPage.tsx
+│   │   ├── DashboardPage.tsx
+│   │   ├── StartCasePage.tsx
+│   │   ├── IntakePage.tsx
+│   │   ├── DiagnosisPage.tsx
+│   │   ├── ActionRadarPage.tsx
+│   │   ├── SourcesPage.tsx
+│   │   ├── DocumentPage.tsx
+│   │   ├── SubmissionPage.tsx
+│   │   ├── CasesPage.tsx
+│   │   ├── CaseDetailPage.tsx
+│   │   ├── DocumentsPage.tsx
+│   │   ├── EvidencePage.tsx
+│   │   ├── NotificationsPage.tsx
+│   │   └── HelpPage.tsx
+│   │
+│   ├── types/
+│   └── index.css
+│
+├── docs/
+│   └── screenshots/
+│
+├── package.json
+├── package-lock.json
+├── postcss.config.js
+├── tailwind.config.js
+├── vite.config.ts
+└── README.md
+```
+
+> The AI/ML services can be maintained as a dedicated intelligence layer alongside the application layer as the backend integration is finalized.
+
+---
+
+# Getting Started
+
+## Prerequisites
+
+Make sure the following are installed:
+
+- Node.js
+- npm
+
+Check your installation:
 
 ```bash
-# Clone the repository
-git clone https://github.com/sameerONgit-debug/rightstrack.git
-cd rightstrack
+node --version
+npm --version
+```
 
-# Install project dependencies
+---
+
+## Clone the Repository
+
+```bash
+git clone https://github.com/shubham01r/RightsRadar.git
+cd RightsRadar
+```
+
+---
+
+## Install Dependencies
+
+```bash
 npm install
-
-# Configure environment variables
-cp .env.example .env.local
 ```
 
 ---
 
-## 8. Environment Variables
-
-| Variable Name | Required | Description |
-|---|---|---|
-| `DATABASE_URL` | Yes | Supabase PostgreSQL direct connection string. |
-| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project API URL. |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase anonymous client key. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Yes | Supabase service role secret key for backend tasks. |
-| `VECTOR_DB_URL` | Yes | Supabase pgvector connection endpoint. |
-| `ANTHROPIC_API_KEY` | Yes | Anthropic API key for Claude 3.5 Sonnet inference. |
-| `VOYAGE_API_KEY` | Yes | Voyage AI API key for legal text embeddings. |
-| `JWT_SECRET` | Yes | Secret used for session state signing. |
-| `NEXT_PUBLIC_APP_URL` | Optional | Base URL for absolute link generation (default: `http://localhost:3000`). |
-
----
-
-## 9. Running Locally
+## Start Development Server
 
 ```bash
-# Seed demo cases for hackathon testing
-npm run seed
-
-# Ingest statutory knowledge base into pgvector
-npm run ingest
-
-# Start local development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Vite will display the local development URL in the terminal.
 
----
+Typically:
 
-## 10. API Documentation
-
-### 1. `POST /api/analyze`
-Classifies a plain-text problem narrative and identifies legal entities.
-- **Request Body**:
-  ```json
-  {
-    "narrative": "I applied for a certified copy of a municipal tender 45 days ago with no reply.",
-    "language": "en"
-  }
-  ```
-- **Response (200 OK)**:
-  ```json
-  {
-    "success": true,
-    "data": {
-      "domain": "RTI",
-      "confidence": 0.96,
-      "rationale": "Involves public authority records under RTI Act 2005.",
-      "entities": {
-        "applicant_name": null,
-        "opposite_party": "Municipal Authority",
-        "relief_sought": "Certified copies of tender documents"
-      },
-      "clarifications": [
-        { "id": "dept", "question": "Which municipal department was addressed?", "required": true }
-      ]
-    },
-    "error": null
-  }
-  ```
-
-### 2. `POST /api/cases`
-Creates a tracked case record and triggers citation-grounded drafting.
-- **Request Body**:
-  ```json
-  {
-    "domain": "RTI",
-    "narrative": "Seeking municipal road repair budget records for Ward 42.",
-    "entities": { "applicant_name": "Aarav Sharma", "public_authority": "DDA" }
-  }
-  ```
-- **Response (201 Created)**:
-  ```json
-  {
-    "success": true,
-    "data": {
-      "case_id": "rt-8f92-411a",
-      "status": "READY_TO_FILE",
-      "domain": "RTI",
-      "document": {
-        "id": "doc-a19e-9901",
-        "content": "BEFORE THE PUBLIC INFORMATION OFFICER...",
-        "citations": [{ "id": "RTI-SEC-6(1)", "verified": true }]
-      },
-      "deadline": { "days_statutory": 30, "status": "PENDING_FILING" }
-    },
-    "error": null
-  }
-  ```
-
-### 3. `GET /api/cases`
-Retrieves all tracked cases for the active session.
-- **Response (200 OK)**:
-  ```json
-  {
-    "success": true,
-    "data": {
-      "cases": [
-        {
-          "case_id": "rt-8f92-411a",
-          "domain": "RTI",
-          "title": "DDA Road Repair RTI",
-          "status": "FILED",
-          "days_remaining": 13,
-          "is_breached": false
-        }
-      ],
-      "total": 1
-    },
-    "error": null
-  }
-  ```
-
-### 4. `GET /api/cases/:caseId`
-Retrieves single case profile, timeline history, and document references.
-
-### 5. `PATCH /api/cases/:caseId`
-Updates case status (recording filing date, acknowledgement numbers, or resolution).
-- **Request Body**:
-  ```json
-  {
-    "status": "FILED",
-    "filing_date": "2026-08-22T00:00:00.000Z",
-    "acknowledgement_number": "DDA/RTI/2026/0912"
-  }
-  ```
-
-### 6. `POST /api/cases/:caseId/escalate`
-Generates a First Appeal or Notice of Non-Compliance when statutory deadlines breach.
-- **Response (200 OK)**:
-  ```json
-  {
-    "success": true,
-    "data": {
-      "case_id": "rt-8f92-411a",
-      "escalation_id": "esc-1092-bb81",
-      "type": "RTI_FIRST_APPEAL",
-      "appeal_document": {
-        "id": "doc-esc-3312",
-        "content": "BEFORE THE FIRST APPELLATE AUTHORITY...\n\nMemorandum of First Appeal under Section 19(1)..."
-      }
-    },
-    "error": null
-  }
-  ```
-
-### 7. `GET /api/sources/:documentId`
-Returns verified statutory source chunks and authorities cited in a generated document.
-
----
-
-## 11. AI/RAG Architecture
-
-```mermaid
-flowchart TD
-    Step1["1. User Plain-Text Input"] --> Step2["2. AI Domain Classification"]
-    Step2 --> Step3["3. Legal Entity Extraction"]
-    Step3 --> Step4["4. Deterministic Clarifying Questions"]
-    Step4 --> Step5["5. Voyage Law Vector Retrieval"]
-    Step5 --> Step6["6. Semantic Passages Reranking"]
-    Step6 --> Step7["7. Claude 3.5 Grounded Legal Drafting"]
-    Step7 --> Step8["8. Deterministic Citation Validation"]
-    Step8 --> Step9["9. Structured Legal Payload Assembly"]
-    Step9 --> Step10["10. Interactive Case UI & Citation Badges"]
+```text
+http://localhost:5173
 ```
 
-### Anti-Hallucination Design
-Legal empowerment tools must uphold rigorous accuracy standards. RightsTrack enforces an anti-hallucination guarantee through a strict post-generation code validation layer (`lib/rag/validator.js`) rather than relying on prompt instructions alone. When Claude drafts a document, citations are embedded using formal tokens (e.g., `[RTI-SEC-6(1)]`). Before the document payload is returned to the user, an AST/regex parser extracts every cited section key and verifies it against the exact set of chunk identifiers retrieved from the pgvector database for that request. Any unverified citation is stripped or causes the draft to fail closed, ensuring no invented statutes or non-existent section numbers ever reach the citizen.
+---
+
+## Build for Production
+
+```bash
+npm run build
+```
 
 ---
 
-## 12. Team
+## Preview Production Build
 
-- **Frontend & UX Lead**: [Name / GitHub Handle] — Next.js App Router, responsive design, state management, citation inspection UI.
-- **Backend & Database Lead**: [Name / GitHub Handle] — Next.js Route Handlers, Supabase PostgreSQL, pgvector integration, deterministic date engine.
-- **AI & Legal Intelligence Lead**: [Name / GitHub Handle] — Claude 3.5 prompt pipelines, Voyage AI embeddings, knowledge base ingestion, anti-hallucination validation.
-
----
-
-## 13. Live Demo & Media
-
-- **Live Application**: [https://rightstrack.vercel.app](https://rightstrack.vercel.app) *(Deployment Link)*
-- **Demo Video Walkthrough**: [https://youtube.com/watch?v=placeholder](https://youtube.com/watch?v=placeholder) *(3-Minute Presentation)*
+```bash
+npm run preview
+```
 
 ---
 
-## 14. Future Scope
+# AI/ML Development
 
-- **Multilingual Support**: Real-time translation and dual-language legal document generation in Hindi and regional Indian languages.
-- **Extended Legal Domains**: Support for municipal grievances (Public Grievance Portal), labor disputes, and tenancy matters.
-- **E-Filing Integration & PDF Export**: Direct integration with RTI Online (rtionline.gov.in) and E-Daakhil consumer portals, with standardized PDF/A formatting.
-- **Automated Communication Reminders**: WhatsApp and SMS notifications alerting citizens 7 days and 2 days prior to statutory deadline expiration.
+The AI/ML layer is being integrated into the same RightsRadar system and is responsible for the intelligence capabilities described above.
+
+The architecture separates:
+
+```text
+Application Layer
+        │
+        ▼
+AI / ML Intelligence Layer
+        │
+        ├── Case Intelligence
+        ├── Smart Questions
+        ├── Evidence Intelligence
+        ├── Retrieval
+        ├── Grounding
+        ├── Reasoning
+        ├── Risk
+        ├── Document Intelligence
+        └── Next-Best Action
+```
+
+This separation allows the interface and case-management system to evolve independently from the underlying intelligence services.
 
 ---
 
-## 15. Repository & Branching Standards
+# Security & Privacy
 
-`main` is the primary protected branch. All feature development must occur on short-lived branches (`feature/*` or `fix/*`) and be merged via pull requests adhering to our [PR Template](.github/pull_request_template.md).
+RightsRadar may process potentially sensitive information such as:
+
+- personal information,
+- financial information,
+- legal disputes,
+- employment information,
+- communications,
+- documents,
+- evidence,
+- and cyber-incident information.
+
+A production deployment should therefore enforce:
+
+### Authentication
+
+Users must be authenticated before accessing private cases.
+
+### Authorization
+
+Users should only access cases they are permitted to access.
+
+### Data Protection
+
+Sensitive information should be encrypted in transit and protected at rest.
+
+### Secret Management
+
+API keys and credentials must never be committed to source control.
+
+### Evidence Access Control
+
+Uploaded evidence should be protected using strict access policies.
+
+### Data Minimization
+
+Only information necessary for the case should be collected and retained.
+
+---
+
+# Responsible AI
+
+RightsRadar is designed as a **decision-support and civic assistance system**, not as a replacement for qualified legal professionals or official authorities.
+
+The system should clearly distinguish between:
+
+```text
+AI Recommendation
+        ≠
+Official Decision
+```
+
+and:
+
+```text
+Document Generated
+        ≠
+Document Filed
+```
+
+and:
+
+```text
+Recommended Escalation
+        ≠
+Official Escalation
+```
+
+Where uncertainty exists, the system should communicate it rather than presenting an unsupported answer with artificial confidence.
+
+For high-risk situations, users should be directed toward appropriate official channels or qualified professionals.
+
+---
+
+# Development Roadmap
+
+## Phase 1 — Product Foundation
+
+- [x] Core RightsRadar interface
+- [x] Case lifecycle experience
+- [x] Case dashboard
+- [x] ActionRadar interface
+- [x] Evidence workflow
+- [x] Document workflow
+- [x] Timeline and case tracking
+
+## Phase 2 — AI Intelligence
+
+- [x] Problem understanding
+- [x] Domain classification
+- [x] Structured case extraction
+- [x] Adaptive question architecture
+- [x] RAG architecture
+- [x] Source grounding
+- [x] Citation validation
+
+## Phase 3 — Advanced Intelligence
+
+- [ ] Multimodal evidence intelligence
+- [ ] Evidence graph
+- [ ] Claim-to-evidence mapping
+- [ ] Case digital twin
+- [ ] Advanced risk scoring
+- [ ] Next-best-action optimization
+- [ ] Counterfactual case reasoning
+
+## Phase 4 — Production Infrastructure
+
+- [ ] Production backend integration
+- [ ] Persistent cloud storage
+- [ ] Production authentication
+- [ ] Notification infrastructure
+- [ ] Background processing
+- [ ] External filing integrations
+
+## Phase 5 — Scale
+
+- [ ] Multilingual support
+- [ ] Additional domain packs
+- [ ] Government service integrations
+- [ ] Official e-filing integrations
+- [ ] Mobile application
+- [ ] Advanced analytics
+
+---
+
+# Demo Strategy
+
+The strongest product demonstration follows a complete case rather than showing isolated screens.
+
+```text
+1. Citizen describes a problem
+              ↓
+2. AI understands the problem
+              ↓
+3. Domain is identified
+              ↓
+4. Smart questions complete the case
+              ↓
+5. Evidence is analyzed
+              ↓
+6. Relevant sources are retrieved
+              ↓
+7. Next action is recommended
+              ↓
+8. Document is generated
+              ↓
+9. User reviews and records filing
+              ↓
+10. Case enters tracking
+              ↓
+11. Deadline approaches
+              ↓
+12. Deadline passes
+              ↓
+13. ActionRadar changes state
+              ↓
+14. Escalation becomes available
+              ↓
+15. Next-stage action is prepared
+```
+
+This demonstrates the core value of RightsRadar:
+
+> **The system does not stop when the document is generated.**
+
+---
+
+# Project Status
+
+RightsRadar is under active development.
+
+The current repository contains the application layer and user-facing case-management experience, while the AI/ML intelligence layer is being integrated into the same system.
+
+The architecture is intentionally designed so that:
+
+```text
+Frontend
+    +
+AI / ML
+    +
+Knowledge
+    +
+Rules
+    +
+Case State
+    +
+Evidence
+    ↓
+One Unified RightsRadar Platform
+```
+
+---
+
+# Contributing
+
+Contributions, suggestions, and improvements are welcome.
+
+Recommended workflow:
+
+```text
+Create Branch
+     ↓
+Implement Change
+     ↓
+Test Locally
+     ↓
+Update Documentation
+     ↓
+Open Pull Request
+```
+
+Suggested branch naming:
+
+```text
+feature/<feature-name>
+fix/<issue-name>
+refactor/<area>
+docs/<change>
+```
+
+---
+
+# License
+
+This project is licensed under the **MIT License**.
+
+See [`LICENSE`](LICENSE) for details.
+
+---
+
+# Final Thought
+
+> ## Knowing your rights is only the first step.
+>
+> **RightsRadar helps you exercise them.**
+
+**Understand → Act → Document → Track → Escalate → Resolve**
+
+---
+
