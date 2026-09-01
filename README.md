@@ -896,9 +896,9 @@ Citizens begin by describing their problem in natural language.
 
 ### Screenshot
 
-> **[ INSERT START CASE SCREENSHOT HERE ]**
 
-Recommended image:
+
+![image alt] (https://github.com/pbhaskar7172-cmd/RightsRadar/blob/964d0fa834627e6ed7c80f78a4dd35120852237f/Screenshot%202026-09-01%20183735.png)
 
 ```text
 docs/screenshots/start-case.png
